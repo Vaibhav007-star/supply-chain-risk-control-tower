@@ -35,3 +35,5 @@ Desktop.ini
 *.db-wal
 *.db-shm
 
+
+.vercel

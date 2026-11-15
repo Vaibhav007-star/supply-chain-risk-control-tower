@@ -1,0 +1,15 @@
+# Vercel Ignore File
+server.py
+src/
+data/
+notebooks/
+tests/
+.git/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.parquet
+Dockerfile
+app.py
+run_pipeline.py
+requirements-dev.txt
