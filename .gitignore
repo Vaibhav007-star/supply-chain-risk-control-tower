@@ -34,3 +34,4 @@ Desktop.ini
 # Temporary Database WAL/SHM files (retain olist.db structure)
 *.db-wal
 *.db-shm
+

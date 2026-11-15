@@ -117,3 +117,4 @@ def test_monotonic_dispatch_sensitivity(pipeline_artifacts):
 
     # Delayed warehouse dispatch should produce higher or equal risk
     assert probs[1] >= probs[0], f"Expected higher risk for slow dispatch, got fast={probs[0]:.4f}, slow={probs[1]:.4f}"
+
