@@ -2,11 +2,16 @@
 ### Production-Grade Machine Learning & Operations Control Tower for E-Commerce Logistics
 *Built for Supply Chain Analytics & Data Science roles at Amazon, Flipkart, Myntra, and enterprise retail logistics.*
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel_Deployment-black?logo=vercel)](https://supply-chain-risk-control-tower.vercel.app)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/API-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Streamlit](https://img.shields.io/badge/App-Streamlit-FF4B4B.svg)](https://streamlit.io/)
 [![Docker](https://img.shields.io/badge/Container-Docker-2496ED.svg)](https://www.docker.com/)
 [![Tests](https://img.shields.io/badge/Tests-Pytest%20Passing-brightgreen.svg)](tests/)
+
+🌐 **Live Production Application:** [https://supply-chain-risk-control-tower.vercel.app](https://supply-chain-risk-control-tower.vercel.app)  
+📖 **Interactive API Documentation:** [https://supply-chain-risk-control-tower.vercel.app/docs](https://supply-chain-risk-control-tower.vercel.app/docs)
 
 ---
 
@@ -139,8 +144,8 @@ The interactive Streamlit dashboard (`app.py`) serves 3 core personas in fulfill
 ### 1. Prerequisites & Environment Setup
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/ecommerce-supply-chain-risk-predictor.git
-cd ecommerce-supply-chain-risk-predictor
+git clone https://github.com/Vaibhav007-star/supply-chain-risk-control-tower.git
+cd supply-chain-risk-control-tower
 
 # Create virtual environment
 python -m venv venv
