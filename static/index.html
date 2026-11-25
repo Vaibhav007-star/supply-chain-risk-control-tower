@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Logistics | Supply Chain Risk Control Tower</title>
-  
-  <!-- Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS CDN -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXUS // Supply Chain Risk Control Tower</title>
+
+  <!-- Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -18,1053 +18,1320 @@
       theme: {
         extend: {
           fontFamily: {
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
             sans: ['Inter', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
-            slate: {
-              850: '#151e2e',
-              900: '#0f172a',
-              950: '#080d1a',
-            },
-            brand: {
-              indigo: '#6366f1',
-              cyan: '#06b6d4',
-              emerald: '#10b981',
-              rose: '#f43f5e',
-              amber: '#f59e0b',
-            }
-          }
-        }
-      }
-    }
+            obsidian: '#04070f',
+            panel: '#0b101d',
+          },
+        },
+      },
+    };
   </script>
 
-  <!-- Lucide Icons -->
+  <!-- Lucide Icons & ApexCharts -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- ApexCharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <style>
-    /* Custom Scrollbars */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0b0f19; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    :root {
+      color-scheme: dark;
+    }
+    body {
+      background-color: #04070f;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 15% -10%, rgba(99, 102, 241, 0.16), transparent),
+        radial-gradient(ellipse 60% 40% at 85% 0%, rgba(6, 182, 212, 0.12), transparent),
+        radial-gradient(ellipse 50% 50% at 50% 100%, rgba(244, 63, 94, 0.06), transparent);
+      background-attachment: fixed;
+    }
+    /* Subtle grid overlay */
+    .bg-grid {
+      background-size: 40px 40px;
+      background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    }
+    .glass {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.78) 0%, rgba(9, 13, 25, 0.88) 100%);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.55);
+    }
+    .glass-hover:hover {
+      border-color: rgba(99, 102, 241, 0.42);
+      box-shadow: 0 12px 36px -8px rgba(99, 102, 241, 0.18);
+    }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
 
-    /* Glassmorphism Classes */
-    .glass-card {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(51, 65, 85, 0.5);
+    /* Ticker animation */
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
-    .glass-card:hover {
-      border-color: rgba(99, 102, 241, 0.4);
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tickerScroll 36s linear infinite;
     }
-    .glow-rose {
-      box-shadow: 0 0 20px -5px rgba(244, 63, 94, 0.3);
+    .ticker-track:hover { animation-play-state: paused; }
+
+    /* Trunkline SVG flow animation */
+    @keyframes dashFlow {
+      to { stroke-dashoffset: -24; }
     }
-    .glow-indigo {
-      box-shadow: 0 0 20px -5px rgba(99, 102, 241, 0.3);
+    .flow-arc {
+      stroke-dasharray: 5 7;
+      animation: dashFlow 1.6s linear infinite;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #04070f; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Range input styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      background: rgba(30, 41, 59, 0.9);
+      height: 6px;
+      border-radius: 999px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #6366f1;
+      border: 2px solid #e0e7ff;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.7);
     }
   </style>
 </head>
+<body class="text-slate-100 font-sans antialiased min-h-screen flex flex-col bg-grid selection:bg-indigo-500/30 selection:text-indigo-200">
 
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col">
-
-  <!-- TOP APP BAR -->
-  <header class="sticky top-0 z-50 glass-card border-b border-slate-800 px-6 py-3.5 flex items-center justify-between">
-    <div class="flex items-center space-x-3.5">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-        <i data-lucide="truck" class="w-5 h-5 text-white"></i>
+  <!-- LIVE MARKET / CORRIDOR TELEMETRY TICKER -->
+  <div class="w-full bg-slate-950/90 border-b border-slate-800/80 overflow-hidden py-1.5 text-[11px] font-mono">
+    <div class="flex items-center">
+      <div class="px-3 py-0.5 bg-indigo-500/15 border-r border-slate-800 text-indigo-300 font-semibold flex items-center gap-1.5 shrink-0 z-10">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span>LIVE CORRIDORS</span>
       </div>
-      <div>
-        <div class="flex items-center space-x-2">
-          <span class="font-extrabold text-base tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-            NEXUS CONTROL TOWER
-          </span>
-          <span class="px-2 py-0.5 text-[10px] font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full">
-            v2.4 Production
-          </span>
+      <div class="overflow-hidden flex-1">
+        <div id="corridor-ticker" class="ticker-track text-slate-400">
+          <span class="px-4">Loading live supply chain telemetry...</span>
         </div>
-        <p class="text-xs text-slate-400">E-Commerce Supply Chain Risk & Delivery Delay Predictor</p>
       </div>
     </div>
+  </div>
 
-    <!-- TABS NAVIGATION -->
-    <nav class="hidden md:flex items-center bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-sm font-medium">
-      <button onclick="switchTab('kpis')" id="tab-btn-kpis" class="tab-btn px-4 py-1.5 rounded-lg text-white bg-indigo-600 shadow-sm flex items-center space-x-2 transition-all">
-        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
-        <span>Executive KPIs</span>
-      </button>
-      <button onclick="switchTab('queue')" id="tab-btn-queue" class="tab-btn px-4 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center space-x-2 transition-all">
-        <i data-lucide="alert-octagon" class="w-4 h-4"></i>
-        <span>High-Risk Queue</span>
-      </button>
-      <button onclick="switchTab('simulator')" id="tab-btn-simulator" class="tab-btn px-4 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center space-x-2 transition-all">
-        <i data-lucide="zap" class="w-4 h-4"></i>
-        <span>Risk Scorer & What-If</span>
-      </button>
-      <button onclick="switchTab('governance')" id="tab-btn-governance" class="tab-btn px-4 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center space-x-2 transition-all">
-        <i data-lucide="shield-check" class="w-4 h-4"></i>
-        <span>Model Governance</span>
-      </button>
-    </nav>
-
-    <!-- RIGHT STATUS BADGES -->
-    <div class="flex items-center space-x-3">
-      <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>Model Calibrated (Sigmoid)</span>
+  <!-- TOP COMMAND HEADER -->
+  <header class="sticky top-0 z-40 glass border-b border-slate-800/80 px-4 lg:px-6 py-3">
+    <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-400 p-[1px] shadow-lg shadow-indigo-500/25">
+          <div class="w-full h-full rounded-[11px] bg-slate-950/90 flex items-center justify-center">
+            <i data-lucide="radar" class="w-5 h-5 text-cyan-300"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-extrabold text-base tracking-tight text-white">
+              NEXUS <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300">CONTROL TOWER</span>
+            </h1>
+            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">
+              MLOps v2.5
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-mono">Zero-Leakage Carrier Handoff Risk Engine · Olist BR Network</p>
+        </div>
       </div>
-      <a href="/docs" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-medium flex items-center space-x-1.5 transition">
-        <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
-        <span>Swagger API</span>
-      </a>
+
+      <!-- Primary Navigation -->
+      <nav class="flex items-center bg-slate-900/80 p-1 rounded-xl border border-slate-800/90 text-xs font-medium overflow-x-auto">
+        <button onclick="switchTab('kpis')" id="tab-btn-kpis" class="tab-btn px-3.5 py-2 rounded-lg text-white bg-indigo-600 shadow-md shadow-indigo-600/25 flex items-center gap-2 transition-all whitespace-nowrap">
+          <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+          <span>Command Overview</span>
+        </button>
+        <button onclick="switchTab('queue')" id="tab-btn-queue" class="tab-btn px-3.5 py-2 rounded-lg text-slate-400 hover:text-white flex items-center gap-2 transition-all whitespace-nowrap">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+          <span>Dispatch Queue</span>
+          <span id="nav-queue-badge" class="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 font-mono text-[10px]">--</span>
+        </button>
+        <button onclick="switchTab('simulator')" id="tab-btn-simulator" class="tab-btn px-3.5 py-2 rounded-lg text-slate-400 hover:text-white flex items-center gap-2 transition-all whitespace-nowrap">
+          <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+          <span>Risk & What-If Lab</span>
+        </button>
+        <button onclick="switchTab('governance')" id="tab-btn-governance" class="tab-btn px-3.5 py-2 rounded-lg text-slate-400 hover:text-white flex items-center gap-2 transition-all whitespace-nowrap">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          <span>Model Governance</span>
+        </button>
+      </nav>
+
+      <!-- Right Controls -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="openCommandPalette()" class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/70 hover:border-indigo-500/50 text-xs text-slate-400 hover:text-slate-200 transition-all">
+          <i data-lucide="search" class="w-3.5 h-3.5"></i>
+          <span>Quick Jump</span>
+          <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 rounded text-slate-300">Ctrl K</kbd>
+        </button>
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="live-clock">--:--:--</span>
+        </div>
+        <button onclick="refreshAllData()" title="Refresh Live Telemetry" class="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white transition-all">
+          <i data-lucide="refresh-cw" id="refresh-icon" class="w-4 h-4"></i>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 lg:px-6 py-6 space-y-6">
 
-    <!-- ==================================================================== -->
-    <!-- TAB 1: EXECUTIVE SUPPLY CHAIN KPIS -->
-    <!-- ==================================================================== -->
-    <section id="tab-kpis" class="tab-content space-y-6">
-      
-      <!-- Top 4 KPI Metrics -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <!-- Metric 1: OTD -->
-        <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
-          <div class="absolute -right-3 -top-3 w-20 h-20 bg-indigo-500/5 rounded-full blur-xl group-hover:bg-indigo-500/10 transition"></div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-medium text-slate-400">On-Time Delivery (OTD)</span>
-            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-              <i data-lucide="check-circle" class="w-4 h-4"></i>
+    <!-- =================================================================== -->
+    <!-- TAB 1: COMMAND OVERVIEW (EXECUTIVE KPIs + BRAZIL NETWORK MAP)       -->
+    <!-- =================================================================== -->
+    <section id="tab-kpis" class="tab-section space-y-6">
+      <!-- Top Bento KPI Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <!-- KPI 1 -->
+        <div class="glass glass-hover rounded-2xl p-5 transition-all relative overflow-hidden">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Delivered Network Volume</p>
+              <p id="kpi-total-orders" class="mt-2 text-3xl font-display font-extrabold text-white tabular-nums">--</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/25 text-indigo-400">
+              <i data-lucide="package-check" class="w-5 h-5"></i>
             </div>
           </div>
-          <div class="flex items-baseline space-x-2">
-            <span id="kpi-otd" class="text-3xl font-extrabold text-white font-mono">--%</span>
-            <span id="kpi-delay-rate" class="text-xs font-semibold text-rose-400">--% Delay</span>
+          <div class="mt-4 flex items-center justify-between text-xs">
+            <span class="text-slate-400 font-mono">10 BR States · 10 Categories</span>
+            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 font-mono">ABT Verified</span>
           </div>
-          <p class="text-[11px] text-slate-500 mt-2">Delivered strictly within promised SLA window</p>
         </div>
 
-        <!-- Metric 2: Orders Monitored -->
-        <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-medium text-slate-400">Delivered Orders Monitored</span>
-            <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
-              <i data-lucide="package" class="w-4 h-4"></i>
+        <!-- KPI 2 -->
+        <div class="glass glass-hover rounded-2xl p-5 transition-all relative overflow-hidden">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wider text-slate-400">On-Time Delivery (OTD)</p>
+              <p id="kpi-otd" class="mt-2 text-3xl font-display font-extrabold text-emerald-400 tabular-nums">--%</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/25 text-emerald-400">
+              <i data-lucide="check-circle-2" class="w-5 h-5"></i>
             </div>
           </div>
-          <div class="flex items-baseline space-x-2">
-            <span id="kpi-orders" class="text-3xl font-extrabold text-white font-mono">--</span>
-            <span class="text-xs text-slate-400">Completed</span>
+          <div class="mt-4">
+            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+              <div id="kpi-otd-bar" class="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full transition-all duration-700" style="width: 0%"></div>
+            </div>
+            <div class="mt-1.5 flex justify-between text-[11px] font-mono text-slate-400">
+              <span>Target SLA: 85.0%</span>
+              <span id="kpi-otd-gap" class="text-amber-300">--</span>
+            </div>
           </div>
-          <p class="text-[11px] text-slate-500 mt-2">Historical SQLite analytical base table</p>
         </div>
 
-        <!-- Metric 3: Warehouse Dispatch Lag -->
-        <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-medium text-slate-400">Avg. Warehouse Dispatch Lag</span>
-            <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
-              <i data-lucide="clock" class="w-4 h-4"></i>
+        <!-- KPI 3 -->
+        <div class="glass glass-hover rounded-2xl p-5 transition-all relative overflow-hidden">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wider text-slate-400">SLA Breach / Delay Rate</p>
+              <p id="kpi-delay-rate" class="mt-2 text-3xl font-display font-extrabold text-rose-400 tabular-nums">--%</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/25 text-rose-400">
+              <i data-lucide="alert-triangle" class="w-5 h-5"></i>
             </div>
           </div>
-          <div class="flex items-baseline space-x-2">
-            <span id="kpi-dispatch" class="text-3xl font-extrabold text-white font-mono">-- h</span>
-            <span class="text-xs text-amber-400">Approval &rarr; Carrier</span>
+          <div class="mt-4 flex items-center justify-between text-xs font-mono">
+            <span class="text-slate-400">Breached Orders:</span>
+            <span id="kpi-delayed-count" class="text-rose-300 font-semibold tabular-nums">--</span>
           </div>
-          <p class="text-[11px] text-slate-500 mt-2">Fulfillment center processing & staging duration</p>
         </div>
 
-        <!-- Metric 4: Carrier Transit Duration -->
-        <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-medium text-slate-400">Avg. Carrier Transit Duration</span>
-            <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-              <i data-lucide="navigation" class="w-4 h-4"></i>
+        <!-- KPI 4 -->
+        <div class="glass glass-hover rounded-2xl p-5 transition-all relative overflow-hidden">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Avg Warehouse Dispatch Lag</p>
+              <p id="kpi-dispatch-hrs" class="mt-2 text-3xl font-display font-extrabold text-cyan-300 tabular-nums">--h</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/25 text-cyan-300">
+              <i data-lucide="timer" class="w-5 h-5"></i>
             </div>
           </div>
-          <div class="flex items-baseline space-x-2">
-            <span id="kpi-transit" class="text-3xl font-extrabold text-white font-mono">-- d</span>
-            <span id="kpi-transit-hours" class="text-xs text-slate-400">-- h in-transit</span>
+          <div class="mt-4 flex items-center justify-between text-xs font-mono">
+            <span class="text-slate-400">Avg Carrier Transit:</span>
+            <span id="kpi-transit-days" class="text-cyan-200 font-semibold tabular-nums">-- days</span>
           </div>
-          <p class="text-[11px] text-slate-500 mt-2">Carrier handoff to customer door delivery</p>
         </div>
       </div>
 
-      <!-- Charts Row 1 -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        <!-- Regional Delay Hotspots Chart -->
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-4">
+      <!-- Network Map + State Vulnerability Chart -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <!-- Interactive Brazil Corridor Topology -->
+        <div class="xl:col-span-5 glass rounded-2xl p-5 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-3">
             <div>
-              <h3 class="text-base font-semibold text-white">Regional Delivery Delay Hotspots</h3>
-              <p class="text-xs text-slate-400">Failure rate (%) by Brazilian destination state</p>
+              <h2 class="font-display font-bold text-base text-white flex items-center gap-2">
+                <i data-lucide="globe-2" class="w-4 h-4 text-cyan-400"></i>
+                Brazil Fulfillment Corridor Topology
+              </h2>
+              <p class="text-xs text-slate-400">Click any state node to inspect queue orders</p>
             </div>
-            <span class="px-2 py-1 text-[11px] font-mono bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-md">
-              High Risk: Remote States
-            </span>
+            <div class="flex items-center gap-2 text-[10px] font-mono">
+              <span class="flex items-center gap-1 text-rose-400"><span class="w-2 h-2 rounded-full bg-rose-500"></span>&gt;35%</span>
+              <span class="flex items-center gap-1 text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400"></span>28-35%</span>
+              <span class="flex items-center gap-1 text-emerald-400"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>&lt;28%</span>
+            </div>
           </div>
-          <div id="chart-state-hotspots" class="w-full min-h-[340px]"></div>
+
+          <div class="relative w-full h-[360px] rounded-xl bg-slate-950/70 border border-slate-800/80 overflow-hidden flex items-center justify-center">
+            <svg id="brazil-network-svg" viewBox="0 0 500 420" class="w-full h-full">
+              <defs>
+                <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.45" />
+                  <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <!-- Subtle Radar Rings centered on SP Hub -->
+              <circle cx="290" cy="300" r="65" fill="none" stroke="rgba(99,102,241,0.12)" stroke-dasharray="3 4" />
+              <circle cx="290" cy="300" r="135" fill="none" stroke="rgba(99,102,241,0.09)" stroke-dasharray="3 4" />
+              <circle cx="290" cy="300" r="215" fill="none" stroke="rgba(99,102,241,0.06)" stroke-dasharray="3 4" />
+              <circle cx="290" cy="300" r="90" fill="url(#hubGlow)" />
+              <g id="svg-corridor-arcs"></g>
+              <g id="svg-state-nodes"></g>
+            </svg>
+            <!-- Hover Tooltip -->
+            <div id="map-tooltip" class="hidden absolute bottom-3 left-3 right-3 glass rounded-xl px-3.5 py-2.5 text-xs flex items-center justify-between pointer-events-none">
+              <div>
+                <span id="tt-state" class="font-display font-bold text-white">--</span>
+                <span id="tt-orders" class="ml-2 font-mono text-slate-400">-- orders</span>
+              </div>
+              <div class="flex items-center gap-3 font-mono">
+                <span id="tt-delay" class="text-rose-400 font-semibold">--% delay</span>
+                <span id="tt-transit" class="text-cyan-300">--h transit</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Dispatch vs Transit Scatter / Bottleneck -->
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-4">
+        <!-- State Delay Chart -->
+        <div class="xl:col-span-7 glass rounded-2xl p-5 flex flex-col">
+          <div class="flex items-center justify-between mb-2">
             <div>
-              <h3 class="text-base font-semibold text-white">Fulfillment Velocity Breakdown</h3>
-              <p class="text-xs text-slate-400">Warehouse dispatch lag vs carrier transit time per state</p>
+              <h2 class="font-display font-bold text-base text-white flex items-center gap-2">
+                <i data-lucide="bar-chart-horizontal" class="w-4 h-4 text-indigo-400"></i>
+                Regional SLA Breach Rate vs Dispatch Velocity
+              </h2>
+              <p class="text-xs text-slate-400">Ranked by delay vulnerability across 10 core Brazilian states</p>
             </div>
-            <span class="px-2 py-1 text-[11px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-md">
-              Quadrant Bottlenecks
+            <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300">
+              Top Hotspot: <strong id="top-hotspot-state" class="text-rose-400">--</strong>
             </span>
           </div>
-          <div id="chart-dispatch-transit" class="w-full min-h-[340px]"></div>
+          <div id="chart-states" class="flex-1 min-h-[340px]"></div>
         </div>
       </div>
 
-      <!-- Product Category Vulnerability Leaderboard -->
-      <div class="glass-card rounded-2xl p-6">
-        <div class="flex items-center justify-between mb-4">
+      <!-- Category Risk Matrix -->
+      <div class="glass rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
-            <h3 class="text-base font-semibold text-white">Product Category Delay Vulnerability Leaderboard</h3>
-            <p class="text-xs text-slate-400">Freight economics and historical delay rates across top merchandise categories</p>
+            <h2 class="font-display font-bold text-base text-white flex items-center gap-2">
+              <i data-lucide="boxes" class="w-4 h-4 text-amber-400"></i>
+              Product Category Risk & Freight Economics
+            </h2>
+            <p class="text-xs text-slate-400">Delay rate, warehouse dispatch lag, and freight burden by SKU category</p>
           </div>
-          <span class="text-xs text-slate-400 font-mono">Ranked by Delay Risk %</span>
         </div>
-        <div class="overflow-x-auto">
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-center">
+          <div class="xl:col-span-6">
+            <div id="chart-categories" class="min-h-[300px]"></div>
+          </div>
+          <div class="xl:col-span-6 overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-[11px] font-mono uppercase text-slate-400 border-b border-slate-800">
+                <tr>
+                  <th class="py-2.5 pr-3">Category</th>
+                  <th class="py-2.5 px-3 text-right">Orders</th>
+                  <th class="py-2.5 px-3 text-right">Delay %</th>
+                  <th class="py-2.5 px-3 text-right">Dispatch</th>
+                  <th class="py-2.5 pl-3 text-right">Avg Freight</th>
+                </tr>
+              </thead>
+              <tbody id="category-table-body" class="divide-y divide-slate-800/60 font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: LIVE DISPATCH PRIORITY QUEUE                                 -->
+    <!-- =================================================================== -->
+    <section id="tab-queue" class="tab-section hidden space-y-5">
+      <!-- Filter Bar -->
+      <div class="glass rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[11px] font-mono uppercase text-slate-400 mr-1">Risk Tier:</span>
+          <button onclick="setQueueTier('all')" data-tier="all" class="tier-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white transition-all">All</button>
+          <button onclick="setQueueTier('Critical')" data-tier="Critical" class="tier-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:border-rose-500/50 transition-all">Critical</button>
+          <button onclick="setQueueTier('High')" data-tier="High" class="tier-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:border-amber-500/50 transition-all">High</button>
+          <button onclick="setQueueTier('Medium')" data-tier="Medium" class="tier-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:border-cyan-500/50 transition-all">Medium</button>
+          <button onclick="setQueueTier('Low')" data-tier="Low" class="tier-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:border-emerald-500/50 transition-all">Low</button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <select id="queue-state-filter" onchange="loadQueue()" class="bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="all">All States</option>
+          </select>
+
+          <div class="flex items-center gap-2 bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-1.5">
+            <span class="text-[11px] font-mono text-slate-400">Min Prob:</span>
+            <input id="queue-min-prob" type="range" min="0" max="80" step="5" value="0" oninput="document.getElementById('queue-min-prob-val').textContent=this.value+'%';" onchange="loadQueue()" class="w-24" />
+            <span id="queue-min-prob-val" class="text-xs font-mono text-indigo-300 w-8 text-right">0%</span>
+          </div>
+
+          <div class="relative">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input id="queue-search" type="text" placeholder="Order ID or category..." oninput="debounceQueue()" class="bg-slate-900 border border-slate-700/80 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 w-52" />
+          </div>
+
+          <a href="/api/queue/export" class="px-3.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-medium flex items-center gap-1.5 transition-all">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Export CSV</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Queue Table -->
+      <div class="glass rounded-2xl overflow-hidden">
+        <div class="px-5 py-3.5 border-b border-slate-800/80 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <h2 class="font-display font-bold text-sm text-white">Prioritized Holdout Dispatch Manifest</h2>
+            <span id="queue-count-label" class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-mono text-[11px]">0 orders</span>
+          </div>
+          <span class="text-[11px] text-slate-400 font-mono">Click any shipment row to inspect &amp; simulate</span>
+        </div>
+        <div class="overflow-x-auto max-h-[600px]">
           <table class="w-full text-left text-xs">
-            <thead class="text-slate-400 bg-slate-900/60 border-b border-slate-800 uppercase font-mono">
+            <thead class="sticky top-0 bg-slate-900/95 backdrop-blur border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 z-10">
               <tr>
-                <th class="py-3 px-4">Category Name</th>
-                <th class="py-3 px-4">Monitored Volume</th>
-                <th class="py-3 px-4">Delay Rate (%)</th>
-                <th class="py-3 px-4">Avg. Dispatch Lag</th>
-                <th class="py-3 px-4">Avg. Freight Cost</th>
-                <th class="py-3 px-4">Risk Level</th>
+                <th class="py-3 px-4">Order ID</th>
+                <th class="py-3 px-3">Tier</th>
+                <th class="py-3 px-3">Delay Risk</th>
+                <th class="py-3 px-3">Corridor</th>
+                <th class="py-3 px-3 text-right">Dispatch Lag</th>
+                <th class="py-3 px-3 text-right">Distance</th>
+                <th class="py-3 px-3 text-right">Order / Freight</th>
+                <th class="py-3 px-4">Category</th>
               </tr>
             </thead>
-            <tbody id="table-category-body" class="divide-y divide-slate-800 font-mono">
-              <tr><td colspan="6" class="py-6 text-center text-slate-500">Loading category benchmarks...</td></tr>
-            </tbody>
+            <tbody id="queue-table-body" class="divide-y divide-slate-800/50"></tbody>
           </table>
         </div>
       </div>
-
     </section>
 
-    <!-- ==================================================================== -->
-    <!-- TAB 2: HIGH-RISK ORDER PRIORITY QUEUE -->
-    <!-- ==================================================================== -->
-    <section id="tab-queue" class="tab-content hidden space-y-6">
-      
-      <!-- Filter Toolbar -->
-      <div class="glass-card rounded-2xl p-5">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          
-          <!-- Search & Dropdowns -->
-          <div class="flex flex-wrap items-center gap-3">
-            <div class="relative w-64">
-              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
-              <input type="text" id="filter-search" oninput="loadQueue()" placeholder="Search Order ID / SKU..."
-                class="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500">
-            </div>
-
-            <!-- Risk Tier Select -->
-            <select id="filter-tier" onchange="loadQueue()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-indigo-500">
-              <option value="All">All Risk Tiers</option>
-              <option value="Critical">Critical (&ge; 70%)</option>
-              <option value="High">High (40 - 70%)</option>
-              <option value="Medium">Medium (20 - 40%)</option>
-              <option value="Low">Low (&lt; 20%)</option>
-            </select>
-
-            <!-- State Filter -->
-            <select id="filter-state" onchange="loadQueue()" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-indigo-500">
-              <option value="All">All Destination States</option>
-              <option value="RJ">RJ - Rio de Janeiro</option>
-              <option value="SP">SP - São Paulo</option>
-              <option value="MG">MG - Minas Gerais</option>
-              <option value="BA">BA - Bahia</option>
-              <option value="AM">AM - Amazonas</option>
-              <option value="PE">PE - Pernambuco</option>
-              <option value="CE">CE - Ceará</option>
-              <option value="RS">RS - Rio Grande do Sul</option>
-            </select>
-
-            <!-- Min Probability Slider -->
-            <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-700 text-xs">
-              <span class="text-slate-400">Min Risk:</span>
-              <input type="range" id="filter-min-prob" min="0" max="1" step="0.05" value="0.25" oninput="updateMinProbLabel(this.value); loadQueue()" class="w-24 accent-indigo-500">
-              <span id="label-min-prob" class="font-mono text-indigo-400 font-semibold">25%</span>
-            </div>
-          </div>
-
-          <!-- Export Action -->
-          <div class="flex items-center space-x-3">
-            <span id="queue-count-badge" class="text-xs font-mono text-slate-400">Found: 0 shipments</span>
-            <a href="/api/queue/export" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition shadow-lg shadow-indigo-600/20">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              <span>Export Manifest (CSV)</span>
-            </a>
-          </div>
-
+    <!-- =================================================================== -->
+    <!-- TAB 3: NEURAL RISK SCORER & WHAT-IF TURNAROUND LAB                  -->
+    <!-- =================================================================== -->
+    <section id="tab-simulator" class="tab-section hidden space-y-5">
+      <!-- Scenario Presets -->
+      <div class="glass rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
+          <span class="text-xs font-semibold text-white">Instant Scenario Presets:</span>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="applyPreset('critical')" class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-medium transition-all">
+            🚨 Remote North/NE Bottleneck (SP→CE · 72h)
+          </button>
+          <button onclick="applyPreset('express')" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-medium transition-all">
+            ⚡ Express Metro Same-State (SP→SP · 8h)
+          </button>
+          <button onclick="applyPreset('heavy')" class="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-medium transition-all">
+            📦 Heavy Cross-Country Freight (MG→AM · 5kg)
+          </button>
         </div>
       </div>
 
-      <!-- High-Risk Manifest Table -->
-      <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
-        <div class="overflow-x-auto max-h-[580px]">
-          <table class="w-full text-left text-xs">
-            <thead class="sticky top-0 bg-slate-900 z-10 border-b border-slate-800 uppercase font-mono text-slate-400">
-              <tr>
-                <th class="py-3.5 px-4">Order ID</th>
-                <th class="py-3.5 px-4">Risk Tier</th>
-                <th class="py-3.5 px-4">Calibrated Delay Risk</th>
-                <th class="py-3.5 px-4">Warehouse Dispatch</th>
-                <th class="py-3.5 px-4">Route Distance</th>
-                <th class="py-3.5 px-4">Order Value</th>
-                <th class="py-3.5 px-4">Freight Fee</th>
-                <th class="py-3.5 px-4">Origin &rarr; Dest</th>
-                <th class="py-3.5 px-4">Category</th>
-              </tr>
-            </thead>
-            <tbody id="table-queue-body" class="divide-y divide-slate-800/80 font-mono">
-              <tr><td colspan="9" class="py-12 text-center text-slate-500">Loading priority shipments...</td></tr>
-            </tbody>
-          </table>
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <!-- Left: Input Controls -->
+        <div class="xl:col-span-5 glass rounded-2xl p-5 space-y-5">
+          <div class="flex items-center justify-between">
+            <h2 class="font-display font-bold text-base text-white flex items-center gap-2">
+              <i data-lucide="sliders-horizontal" class="w-4 h-4 text-cyan-400"></i>
+              Pre-Handoff Shipment Parameters
+            </h2>
+            <button onclick="runSimulation()" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/25 flex items-center gap-1.5 transition-all">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Score Order</span>
+            </button>
+          </div>
+
+          <div class="space-y-4 text-xs">
+            <!-- Dispatch Hours -->
+            <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+              <div class="flex justify-between mb-2">
+                <label class="font-medium text-slate-300">Warehouse Dispatch Lag (hours)</label>
+                <span id="val-dispatch" class="font-mono font-bold text-cyan-300">48 h</span>
+              </div>
+              <input id="sim-dispatch" type="range" min="2" max="120" step="1" value="48" oninput="updateSimLabels()" class="w-full" />
+            </div>
+
+            <!-- Distance & SLA -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+                <div class="flex justify-between mb-2">
+                  <label class="font-medium text-slate-300">Distance</label>
+                  <span id="val-distance" class="font-mono font-bold text-indigo-300">1200 km</span>
+                </div>
+                <input id="sim-distance" type="range" min="20" max="3500" step="20" value="1200" oninput="updateSimLabels()" class="w-full" />
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+                <div class="flex justify-between mb-2">
+                  <label class="font-medium text-slate-300">Promised SLA</label>
+                  <span id="val-sla" class="font-mono font-bold text-indigo-300">16 d</span>
+                </div>
+                <input id="sim-sla" type="range" min="3" max="40" step="1" value="16" oninput="updateSimLabels()" class="w-full" />
+              </div>
+            </div>
+
+            <!-- Seller Delay Rate -->
+            <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+              <div class="flex justify-between mb-2">
+                <label class="font-medium text-slate-300">Seller Historical Delay Rate (Bayesian OOF)</label>
+                <span id="val-seller-rate" class="font-mono font-bold text-amber-300">22%</span>
+              </div>
+              <input id="sim-seller-rate" type="range" min="0" max="80" step="1" value="22" oninput="updateSimLabels()" class="w-full" />
+            </div>
+
+            <!-- Origin / Dest / Category -->
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="block text-slate-400 mb-1">Seller State</label>
+                <select id="sim-seller-state" onchange="debounceSim()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200 font-mono">
+                  <option value="SP" selected>SP</option><option value="MG">MG</option><option value="RJ">RJ</option><option value="PR">PR</option><option value="RS">RS</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Customer State</label>
+                <select id="sim-customer-state" onchange="debounceSim()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200 font-mono">
+                  <option value="CE" selected>CE</option><option value="AM">AM</option><option value="PE">PE</option><option value="BA">BA</option>
+                  <option value="RJ">RJ</option><option value="SP">SP</option><option value="MG">MG</option><option value="RS">RS</option><option value="PR">PR</option><option value="DF">DF</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Category</label>
+                <select id="sim-category" onchange="debounceSim()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200">
+                  <option value="computers_accessories">computers_accessories</option>
+                  <option value="health_beauty">health_beauty</option>
+                  <option value="bed_bath_table">bed_bath_table</option>
+                  <option value="sports_leisure">sports_leisure</option>
+                  <option value="furniture_decor">furniture_decor</option>
+                  <option value="watches_gifts">watches_gifts</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Financials & Weight -->
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="block text-slate-400 mb-1">Order Value (R$)</label>
+                <input id="sim-order-val" type="number" value="180" oninput="debounceSim()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200 font-mono" />
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Freight (R$)</label>
+                <input id="sim-freight-val" type="number" value="38" oninput="debounceSim()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200 font-mono" />
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Weight (g)</label>
+                <input id="sim-weight" type="number" value="2500" oninput="debounceSim()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200 font-mono" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Live Prediction, What-If Curve & SHAP -->
+        <div class="xl:col-span-7 space-y-6">
+          <!-- Top Decision Banner + Gauge -->
+          <div class="glass rounded-2xl p-5 grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+            <div class="md:col-span-5">
+              <div id="chart-risk-gauge" class="min-h-[210px]"></div>
+            </div>
+            <div class="md:col-span-7 space-y-3">
+              <div class="flex items-center gap-2">
+                <span id="sim-tier-badge" class="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-slate-800 text-slate-300">--</span>
+                <span id="sim-model-tag" class="text-[11px] font-mono text-slate-400">Calibrated Pipeline</span>
+              </div>
+              <h3 id="sim-decision-title" class="font-display font-extrabold text-xl text-white">Calculating Risk...</h3>
+              <p id="sim-decision-desc" class="text-xs text-slate-400 leading-relaxed">
+                Adjust any warehouse dispatch or corridor parameter to simulate calibrated delay probability in real time.
+              </p>
+              <div id="sim-whatif-pills" class="flex flex-wrap gap-2 pt-1"></div>
+            </div>
+          </div>
+
+          <!-- What-If Acceleration Curve & SHAP Attribution -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-display font-bold text-sm text-white mb-1 flex items-center gap-2">
+                <i data-lucide="trending-down" class="w-4 h-4 text-emerald-400"></i>
+                What-If Dispatch Acceleration
+              </h3>
+              <p class="text-[11px] text-slate-400 mb-3">Risk reduction if warehouse expedites handoff by 12h–48h</p>
+              <div id="chart-whatif" class="min-h-[220px]"></div>
+            </div>
+
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-display font-bold text-sm text-white mb-1 flex items-center gap-2">
+                <i data-lucide="git-commit-horizontal" class="w-4 h-4 text-indigo-400"></i>
+                Local Root-Cause Attribution
+              </h3>
+              <p class="text-[11px] text-slate-400 mb-3">Top drivers pushing this shipment's risk up or down</p>
+              <div id="shap-local-bars" class="space-y-2.5"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: MODEL & MLOPS GOVERNANCE                                     -->
+    <!-- =================================================================== -->
+    <section id="tab-governance" class="tab-section hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="glass rounded-2xl p-5 border-l-4 border-l-indigo-500">
+          <p class="text-xs font-mono uppercase text-slate-400">Champion Architecture</p>
+          <p id="gov-champion" class="mt-1.5 text-2xl font-display font-extrabold text-white">--</p>
+          <p class="mt-2 text-xs text-slate-400">Chronological 70/15/15 split · Zero lookahead leakage</p>
+        </div>
+        <div class="glass rounded-2xl p-5 border-l-4 border-l-emerald-500">
+          <p class="text-xs font-mono uppercase text-slate-400">Platt Calibration (Brier)</p>
+          <p id="gov-brier" class="mt-1.5 text-2xl font-display font-extrabold text-emerald-400 tabular-nums">-- → --</p>
+          <p class="mt-2 text-xs text-slate-400">Sigmoid calibration ensures true empirical risk probabilities</p>
+        </div>
+        <div class="glass rounded-2xl p-5 border-l-4 border-l-rose-500">
+          <p class="text-xs font-mono uppercase text-slate-400">Cost-Optimal Threshold (τ*)</p>
+          <p id="gov-threshold" class="mt-1.5 text-2xl font-display font-extrabold text-rose-400 tabular-nums">--</p>
+          <p class="mt-2 text-xs text-slate-400">Minimizes <span class="font-mono text-slate-200">5×FN + 1×FP</span> · Test Recall: <strong id="gov-recall" class="text-white">--%</strong></p>
         </div>
       </div>
 
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div class="xl:col-span-7 glass rounded-2xl p-5">
+          <h2 class="font-display font-bold text-base text-white mb-1">Model Benchmark Leaderboard</h2>
+          <p class="text-xs text-slate-400 mb-4">Validation holdout comparison across 4 ML architectures</p>
+          <div id="chart-leaderboard" class="min-h-[280px]"></div>
+          <div class="mt-4 overflow-x-auto">
+            <table class="w-full text-left text-xs font-mono">
+              <thead class="text-[11px] uppercase text-slate-400 border-b border-slate-800">
+                <tr>
+                  <th class="py-2 pr-3">Model</th>
+                  <th class="py-2 px-3 text-right">ROC-AUC</th>
+                  <th class="py-2 px-3 text-right">PR-AUC</th>
+                  <th class="py-2 px-3 text-right">Brier</th>
+                  <th class="py-2 px-3 text-right">F1</th>
+                  <th class="py-2 pl-3 text-right">Recall</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-table-body" class="divide-y divide-slate-800/60"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="xl:col-span-5 glass rounded-2xl p-5">
+          <h2 class="font-display font-bold text-base text-white mb-1">Global SHAP Root-Cause Importance</h2>
+          <p class="text-xs text-slate-400 mb-4">Mean |SHAP value| across holdout test shipments</p>
+          <div id="chart-global-shap" class="min-h-[400px]"></div>
+        </div>
+      </div>
     </section>
+  </main>
 
-    <!-- ==================================================================== -->
-    <!-- TAB 3: ORDER RISK SCORER & WHAT-IF SIMULATOR -->
-    <!-- ==================================================================== -->
-    <section id="tab-simulator" class="tab-content hidden space-y-6">
-      
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Left: Form Controls (5 cols) -->
-        <div class="lg:col-span-5 glass-card rounded-2xl p-6 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div>
-              <h3 class="text-base font-semibold text-white">Order & Route Parameters</h3>
-              <p class="text-xs text-slate-400">Configure fulfillment parameters for real-time risk scoring</p>
-            </div>
-            <button onclick="resetSimulatorDefaults()" class="text-xs text-indigo-400 hover:text-indigo-300 font-mono">Reset</button>
+  <!-- SLIDE-OVER ORDER INSPECTOR DRAWER -->
+  <div id="order-drawer" class="fixed inset-0 z-50 hidden">
+    <div onclick="closeDrawer()" class="absolute inset-0 bg-black/65 backdrop-blur-sm"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-full max-w-md glass border-l border-slate-700/70 p-6 flex flex-col justify-between overflow-y-auto">
+      <div class="space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div>
+            <p class="text-[11px] font-mono uppercase text-indigo-400">Shipment Telemetry</p>
+            <h3 id="drawer-order-id" class="font-mono font-bold text-sm text-white mt-0.5">--</h3>
           </div>
-
-          <!-- Dimensions & Weights -->
-          <div class="grid grid-cols-2 gap-3 text-xs">
-            <div>
-              <label class="text-slate-400 block mb-1">Total Weight (grams)</label>
-              <input type="number" id="sim-weight" value="2500" step="100" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono focus:outline-none focus:border-indigo-500">
-            </div>
-            <div>
-              <label class="text-slate-400 block mb-1">Package Volume (cm³)</label>
-              <input type="number" id="sim-volume" value="8000" step="500" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono focus:outline-none focus:border-indigo-500">
-            </div>
-          </div>
-
-          <!-- Financials -->
-          <div class="grid grid-cols-2 gap-3 text-xs">
-            <div>
-              <label class="text-slate-400 block mb-1">Order Value (R$)</label>
-              <input type="number" id="sim-order-val" value="180" step="10" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono focus:outline-none focus:border-indigo-500">
-            </div>
-            <div>
-              <label class="text-slate-400 block mb-1">Freight Fee (R$)</label>
-              <input type="number" id="sim-freight" value="35" step="5" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono focus:outline-none focus:border-indigo-500">
-            </div>
-          </div>
-
-          <!-- Origin & Destination States -->
-          <div class="grid grid-cols-2 gap-3 text-xs">
-            <div>
-              <label class="text-slate-400 block mb-1">Origin Seller State</label>
-              <select id="sim-seller-state" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500">
-                <option value="SP">SP - São Paulo</option>
-                <option value="RJ">RJ - Rio de Janeiro</option>
-                <option value="MG">MG - Minas Gerais</option>
-                <option value="BA">BA - Bahia</option>
-                <option value="PR">PR - Paraná</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-slate-400 block mb-1">Destination State</label>
-              <select id="sim-cust-state" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500">
-                <option value="RJ" selected>RJ - Rio de Janeiro</option>
-                <option value="SP">SP - São Paulo</option>
-                <option value="BA">BA - Bahia</option>
-                <option value="AM">AM - Amazonas</option>
-                <option value="PE">PE - Pernambuco</option>
-                <option value="CE">CE - Ceará</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Transit Distance & SLA -->
-          <div class="space-y-3 text-xs pt-1">
-            <div>
-              <div class="flex justify-between text-slate-400 mb-1">
-                <span>Estimated Transit Distance (km):</span>
-                <span id="label-sim-dist" class="text-white font-mono font-semibold">450 km</span>
-              </div>
-              <input type="range" id="sim-dist" min="20" max="3500" step="25" value="450" oninput="document.getElementById('label-sim-dist').innerText = this.value + ' km'; runPrediction();" class="w-full accent-indigo-500">
-            </div>
-
-            <div>
-              <div class="flex justify-between text-slate-400 mb-1">
-                <span>Promised Customer SLA (Days):</span>
-                <span id="label-sim-sla" class="text-white font-mono font-semibold">18 Days</span>
-              </div>
-              <input type="range" id="sim-sla" min="5" max="45" step="1" value="18" oninput="document.getElementById('label-sim-sla').innerText = this.value + ' Days'; runPrediction();" class="w-full accent-indigo-500">
-            </div>
-
-            <div>
-              <div class="flex justify-between text-slate-400 mb-1">
-                <span>Current Warehouse Dispatch Lag (Hours):</span>
-                <span id="label-sim-dispatch" class="text-amber-400 font-mono font-semibold">48 Hours</span>
-              </div>
-              <input type="range" id="sim-dispatch" min="4" max="144" step="4" value="48" oninput="document.getElementById('label-sim-dispatch').innerText = this.value + ' Hours'; runPrediction();" class="w-full accent-amber-500">
-            </div>
-
-            <div>
-              <div class="flex justify-between text-slate-400 mb-1">
-                <span>Seller Historical Delay Rate:</span>
-                <span id="label-sim-seller-rate" class="text-white font-mono font-semibold">18%</span>
-              </div>
-              <input type="range" id="sim-seller-rate" min="0" max="0.8" step="0.02" value="0.18" oninput="document.getElementById('label-sim-seller-rate').innerText = Math.round(this.value * 100) + '%'; runPrediction();" class="w-full accent-indigo-500">
-            </div>
-          </div>
-
-          <!-- Category & Payment -->
-          <div class="grid grid-cols-2 gap-3 text-xs pt-2">
-            <div>
-              <label class="text-slate-400 block mb-1">Category</label>
-              <select id="sim-category" onchange="runPrediction()" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs">
-                <option value="health_beauty">Health & Beauty</option>
-                <option value="watches_gifts">Watches & Gifts</option>
-                <option value="bed_bath_table">Bed Bath & Table</option>
-                <option value="sports_leisure">Sports & Leisure</option>
-                <option value="computers_accessories">Computers & Acc</option>
-                <option value="furniture_decor">Furniture & Decor</option>
-                <option value="telephony">Telephony</option>
-                <option value="auto">Auto</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-slate-400 block mb-1">Payment Method</label>
-              <select id="sim-payment" onchange="runPrediction()" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs">
-                <option value="credit_card">Credit Card</option>
-                <option value="boleto">Boleto</option>
-                <option value="voucher">Voucher</option>
-                <option value="debit_card">Debit Card</option>
-              </select>
-            </div>
-          </div>
-
-          <button onclick="runPrediction()" class="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold rounded-xl text-xs shadow-lg shadow-indigo-600/30 transition flex items-center justify-center space-x-2">
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-            <span>Re-Score Order Risk</span>
+          <button onclick="closeDrawer()" class="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white">
+            <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <!-- Right: Results & What-If Simulation (7 cols) -->
-        <div class="lg:col-span-7 space-y-6">
-          
-          <!-- Top Row: Radial Gauge & Summary Status Card -->
-          <div class="glass-card rounded-2xl p-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            
-            <!-- Apex Radial Gauge -->
-            <div class="flex flex-col items-center justify-center">
-              <div id="chart-risk-gauge" class="w-full h-56 flex items-center justify-center"></div>
-              <p class="text-xs text-slate-400 font-mono -mt-4">Calibrated Probability</p>
-            </div>
-
-            <!-- Risk Status Details -->
-            <div class="space-y-4">
-              <div>
-                <span class="text-xs uppercase tracking-wider text-slate-400 font-medium">Risk Assessment</span>
-                <div class="flex items-center space-x-2.5 mt-1">
-                  <span id="sim-status-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                    CRITICAL RISK
-                  </span>
-                  <span id="sim-binary-pred" class="text-xs font-mono text-slate-300">Delayed Likely</span>
-                </div>
-              </div>
-
-              <div class="space-y-2 text-xs font-mono bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                <div class="flex justify-between">
-                  <span class="text-slate-400">Champion Model:</span>
-                  <span id="sim-model-name" class="text-white font-semibold">RandomForest</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-400">Decision Threshold:</span>
-                  <span id="sim-threshold" class="text-indigo-400 font-semibold">0.130</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-slate-400">Intervention Policy:</span>
-                  <span class="text-emerald-400 font-semibold">Expedited Lane Recommended</span>
-                </div>
-              </div>
-
-              <p class="text-[11px] text-slate-500">
-                Tuned to capture 100% of delayed shipments on holdout validation.
-              </p>
-            </div>
-
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-slate-400">Calibrated Delay Risk</p>
+            <p id="drawer-prob" class="text-3xl font-display font-extrabold text-rose-400 tabular-nums mt-1">--%</p>
           </div>
-
-          <!-- What-If Fulfillment Acceleration Simulator -->
-          <div class="glass-card rounded-2xl p-6 space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div>
-                <h4 class="text-sm font-semibold text-white flex items-center space-x-2">
-                  <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i>
-                  <span>What-If Fulfillment Acceleration Simulator</span>
-                </h4>
-                <p class="text-xs text-slate-400">Observe how reducing warehouse dwell time mitigates overall delay risk</p>
-              </div>
-              <span id="sim-reduction-badge" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                -0.0% Risk
-              </span>
-            </div>
-
-            <!-- Slider to trim hours -->
-            <div class="space-y-1">
-              <div class="flex justify-between text-xs text-slate-300">
-                <span>Expedite Dispatch Turnaround By:</span>
-                <span id="label-hours-saved" class="font-mono text-indigo-400 font-bold">24 Hours Saved</span>
-              </div>
-              <input type="range" id="sim-expedite-hours" min="0" max="48" step="12" value="24" oninput="updateWhatIfSlider(this.value)" class="w-full accent-indigo-500">
-              <div class="flex justify-between text-[10px] text-slate-500 font-mono">
-                <span>0h (Standard)</span>
-                <span>12h</span>
-                <span>24h (Priority)</span>
-                <span>36h</span>
-                <span>48h (Emergency)</span>
-              </div>
-            </div>
-
-            <!-- Sensitivity Curve Chart -->
-            <div id="chart-sensitivity-curve" class="w-full min-h-[190px]"></div>
-          </div>
-
-          <!-- Local SHAP Feature Attribution (Root Cause Diagnosis) -->
-          <div class="glass-card rounded-2xl p-6">
-            <div class="flex items-center justify-between mb-2">
-              <div>
-                <h4 class="text-sm font-semibold text-white flex items-center space-x-2">
-                  <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
-                  <span>Local SHAP Root Cause Attribution</span>
-                </h4>
-                <p class="text-xs text-slate-400">Feature forces pushing delay probability higher (+) or pulling it lower (-)</p>
-              </div>
-              <span class="text-[11px] font-mono text-slate-400">Order-Specific SHAP Impact</span>
-            </div>
-            <div id="chart-shap-waterfall" class="w-full min-h-[220px]"></div>
-          </div>
-
+          <span id="drawer-tier" class="px-3 py-1 rounded-full text-xs font-mono font-bold">--</span>
         </div>
 
+        <div id="drawer-details" class="grid grid-cols-2 gap-3 text-xs font-mono"></div>
       </div>
 
-    </section>
-
-    <!-- ==================================================================== -->
-    <!-- TAB 4: MLOPS & MODEL GOVERNANCE -->
-    <!-- ==================================================================== -->
-    <section id="tab-governance" class="tab-content hidden space-y-6">
-      
-      <!-- Top Card: Model Governance Overview -->
-      <div class="glass-card rounded-2xl p-6">
-        <h3 class="text-base font-semibold text-white mb-1">Production MLOps Governance & Architecture Benchmark</h3>
-        <p class="text-xs text-slate-400 mb-6">
-          Full validation leaderboard across candidate architectures evaluated under a chronological time-split.
-        </p>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs font-mono">
-            <thead class="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase">
-              <tr>
-                <th class="py-3 px-4">Architecture</th>
-                <th class="py-3 px-4">PR-AUC (Precision-Recall)</th>
-                <th class="py-3 px-4">ROC-AUC</th>
-                <th class="py-3 px-4">Brier Score</th>
-                <th class="py-3 px-4">F1-Score</th>
-                <th class="py-3 px-4">Status</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800">
-              <tr class="bg-indigo-500/5">
-                <td class="py-3.5 px-4 font-bold text-white flex items-center space-x-2">
-                  <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
-                  <span>RandomForest (Champion)</span>
-                </td>
-                <td class="py-3.5 px-4 text-indigo-400 font-bold">0.4977</td>
-                <td class="py-3.5 px-4">0.6666</td>
-                <td class="py-3.5 px-4 text-emerald-400 font-semibold">0.1917 (Calibrated)</td>
-                <td class="py-3.5 px-4">0.4939 (Tuned)</td>
-                <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Active In Production</span></td>
-              </tr>
-              <tr>
-                <td class="py-3 px-4 text-slate-300">Logistic Regression (L2)</td>
-                <td class="py-3 px-4">0.4970</td>
-                <td class="py-3 px-4 font-semibold text-slate-200">0.6800</td>
-                <td class="py-3 px-4">0.2178</td>
-                <td class="py-3 px-4">0.5223</td>
-                <td class="py-3 px-4 text-slate-500">Benchmark Baseline</td>
-              </tr>
-              <tr>
-                <td class="py-3 px-4 text-slate-300">LightGBM Classifier</td>
-                <td class="py-3 px-4">0.4846</td>
-                <td class="py-3 px-4">0.6591</td>
-                <td class="py-3 px-4">0.2151</td>
-                <td class="py-3 px-4">0.4622</td>
-                <td class="py-3 px-4 text-slate-500">Benchmark Candidate</td>
-              </tr>
-              <tr>
-                <td class="py-3 px-4 text-slate-300">XGBoost Classifier</td>
-                <td class="py-3 px-4">0.4796</td>
-                <td class="py-3 px-4">0.6647</td>
-                <td class="py-3 px-4">0.2137</td>
-                <td class="py-3 px-4">0.4783</td>
-                <td class="py-3 px-4 text-slate-500">Benchmark Candidate</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="pt-5 border-t border-slate-800 flex gap-3">
+        <button onclick="simulateFromDrawer()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+          <i data-lucide="cpu" class="w-4 h-4"></i>
+          <span>Open in What-If Lab</span>
+        </button>
       </div>
+    </div>
+  </div>
 
-      <!-- Leak-Free & Probability Calibration Details -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <div class="glass-card rounded-2xl p-6 space-y-3">
-          <h4 class="text-sm font-semibold text-white flex items-center space-x-2">
-            <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
-            <span>Zero Data Leakage Protocol</span>
-          </h4>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Predictors are restricted exclusively to features known at or prior to carrier handoff:
-          </p>
-          <ul class="text-xs text-slate-300 space-y-1.5 list-disc pl-4 font-mono">
-            <li>Customer review scores & comments are quarantined.</li>
-            <li>Actual customer delivery timestamps are excluded.</li>
-            <li>Seller delay rates use an expanding historical Bayesian window.</li>
-            <li>Geospatial Haversine distances use pre-aggregated centroid lookups.</li>
-          </ul>
-        </div>
-
-        <div class="glass-card rounded-2xl p-6 space-y-3">
-          <h4 class="text-sm font-semibold text-white flex items-center space-x-2">
-            <i data-lucide="target" class="w-4 h-4 text-indigo-400"></i>
-            <span>Asymmetric Loss & Threshold Tuning</span>
-          </h4>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            In retail logistics (Amazon, Flipkart), a false negative (missed late delivery) damages customer trust significantly more than an operational false positive:
-          </p>
-          <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-xs font-mono text-indigo-300">
-            Cost = 5.0 &times; FN + 1.0 &times; FP &rarr; Optimal Threshold &tau;* = 0.130
-          </div>
-          <p class="text-[11px] text-slate-500">
-            Yields 100% recall on delayed shipments while maintaining operational viability.
-          </p>
-        </div>
-
+  <!-- COMMAND PALETTE MODAL (Ctrl+K) -->
+  <div id="cmd-modal" class="fixed inset-0 z-50 hidden items-start justify-center pt-24 px-4">
+    <div onclick="closeCommandPalette()" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-lg glass rounded-2xl border border-slate-700/80 overflow-hidden shadow-2xl">
+      <div class="flex items-center px-4 py-3 border-b border-slate-800">
+        <i data-lucide="terminal" class="w-4 h-4 text-indigo-400 mr-3"></i>
+        <input id="cmd-input" type="text" placeholder="Jump to tab or filter state (e.g. CE, queue, simulator)..." oninput="filterCommands(this.value)" class="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none" />
+        <kbd class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">ESC</kbd>
       </div>
+      <div id="cmd-list" class="p-2 max-h-72 overflow-y-auto space-y-1 text-xs"></div>
+    </div>
+  </div>
 
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="mt-auto border-t border-slate-800 glass-card py-4 px-6 text-center text-xs text-slate-500 font-mono">
-    Nexus Logistics Operations Control Tower &bull; Production Model Serving via FastAPI &bull; Brazilian E-Commerce Analytics
-  </footer>
-
-  <!-- ==================================================================== -->
-  <!-- JAVASCRIPT APP LOGIC & APEXCHARTS -->
-  <!-- ==================================================================== -->
+  <!-- APPLICATION SCRIPT -->
   <script>
-    // Initialize Lucide Icons
-    lucide.createIcons();
+    // -----------------------------------------------------------------------
+    // STATE & INITIALIZATION
+    // -----------------------------------------------------------------------
+    let kpisData = null;
+    let modelData = null;
+    let queueOrders = [];
+    let activeTier = 'all';
+    let selectedDrawerOrder = null;
+    let charts = {};
+    let queueTimer = null;
+    let simTimer = null;
 
-    // Active Tab Navigation
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
-        btn.classList.add('text-slate-400');
+    const BR_COORDS = {
+      AM: { x: 115, y: 105, name: 'Amazonas' },
+      CE: { x: 380, y: 115, name: 'Ceará' },
+      PE: { x: 420, y: 155, name: 'Pernambuco' },
+      BA: { x: 365, y: 205, name: 'Bahia' },
+      DF: { x: 265, y: 225, name: 'Distrito Federal' },
+      MG: { x: 325, y: 268, name: 'Minas Gerais' },
+      RJ: { x: 350, y: 312, name: 'Rio de Janeiro' },
+      SP: { x: 290, y: 300, name: 'São Paulo (Hub)' },
+      PR: { x: 245, y: 342, name: 'Paraná' },
+      RS: { x: 225, y: 385, name: 'Rio Grande do Sul' },
+    };
+
+    const COMMANDS = [
+      { label: 'Go to Command Overview (KPIs & Map)', action: () => switchTab('kpis') },
+      { label: 'Go to Live Dispatch Queue', action: () => switchTab('queue') },
+      { label: 'Go to Neural Risk & What-If Lab', action: () => switchTab('simulator') },
+      { label: 'Go to Model & MLOps Governance', action: () => switchTab('governance') },
+      { label: 'Filter Queue: Critical Risk Only', action: () => { switchTab('queue'); setQueueTier('Critical'); } },
+      { label: 'Filter Queue: Ceará (CE) Corridor', action: () => { switchTab('queue'); document.getElementById('queue-state-filter').value = 'CE'; loadQueue(); } },
+      { label: 'Simulate Remote Bottleneck (SP→CE)', action: () => { switchTab('simulator'); applyPreset('critical'); } },
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      updateClock();
+      setInterval(updateClock, 1000);
+      refreshAllData();
+      runSimulation();
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          openCommandPalette();
+        } else if (e.key === 'Escape') {
+          closeCommandPalette();
+          closeDrawer();
+        }
       });
+    });
 
-      const target = document.getElementById('tab-' + tabId);
-      const btn = document.getElementById('tab-btn-' + tabId);
-      if (target) target.classList.remove('hidden');
-      if (btn) {
-        btn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
-        btn.classList.remove('text-slate-400');
-      }
-
-      // Re-render chart sizing on tab reveal
-      if (tabId === 'kpis' && window.stateChart) {
-        window.stateChart.render();
-      }
-      if (tabId === 'simulator') {
-        runPrediction();
-      }
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-GB', { hour12: false }) + ' UTC+5:30';
     }
 
-    // Chart Handles
-    let stateChart = null;
-    let scatterChart = null;
-    let gaugeChart = null;
-    let curveChart = null;
-    let shapChart = null;
-    let currentPredictionData = null;
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-section').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/25');
+        btn.classList.add('text-slate-400');
+      });
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/25');
+      activeBtn.classList.remove('text-slate-400');
+
+      // Trigger resize for ApexCharts inside newly visible tab
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 60);
+    }
+
+    async function refreshAllData() {
+      const icon = document.getElementById('refresh-icon');
+      icon.classList.add('animate-spin');
+      await Promise.all([loadKPIs(), loadQueue(), loadModelInfo()]);
+      setTimeout(() => icon.classList.remove('animate-spin'), 400);
+    }
 
     // -----------------------------------------------------------------------
-    // FETCH EXECUTIVE KPIS & RENDER CHARTS
+    // 1. KPIs & BRAZIL NETWORK MAP
     // -----------------------------------------------------------------------
     async function loadKPIs() {
       try {
         const res = await fetch('/api/kpis');
-        const data = await res.json();
-        const s = data.summary;
+        kpisData = await res.json();
+        const s = kpisData.summary || {};
 
-        document.getElementById('kpi-otd').innerText = s.on_time_delivery_pct + '%';
-        document.getElementById('kpi-delay-rate').innerText = s.delay_rate_pct + '% Delay';
-        document.getElementById('kpi-orders').innerText = s.total_orders.toLocaleString();
-        document.getElementById('kpi-dispatch').innerText = s.avg_dispatch_hours + ' h';
-        document.getElementById('kpi-transit').innerText = s.avg_transit_days + ' d';
-        document.getElementById('kpi-transit-hours').innerText = s.avg_transit_hours + ' h in-transit';
+        document.getElementById('kpi-total-orders').textContent = Number(s.total_orders || 0).toLocaleString();
+        document.getElementById('kpi-otd').textContent = `${(s.on_time_delivery_pct || 0).toFixed(2)}%`;
+        document.getElementById('kpi-otd-bar').style.width = `${s.on_time_delivery_pct || 0}%`;
+        const gap = (85 - (s.on_time_delivery_pct || 0)).toFixed(1);
+        document.getElementById('kpi-otd-gap').textContent = gap > 0 ? `-${gap}% vs target` : 'On Target';
 
-        // 1. Regional Delay Hotspots Bar Chart
-        const states = data.states.slice().sort((a, b) => b.delay_rate_pct - a.delay_rate_pct).slice(0, 10);
-        const stateCategories = states.map(x => x.customer_state);
-        const stateValues = states.map(x => x.delay_rate_pct);
+        document.getElementById('kpi-delay-rate').textContent = `${(s.delay_rate_pct || 0).toFixed(2)}%`;
+        document.getElementById('kpi-delayed-count').textContent = Number(s.total_delayed || 0).toLocaleString();
+        document.getElementById('kpi-dispatch-hrs').textContent = `${(s.avg_dispatch_hours || 0).toFixed(1)}h`;
+        document.getElementById('kpi-transit-days').textContent = `${(s.avg_transit_days || 0).toFixed(1)} days`;
 
-        const stateOptions = {
-          series: [{ name: 'Delay Rate (%)', data: stateValues }],
-          chart: { type: 'bar', height: 320, toolbar: { show: false }, background: 'transparent' },
-          plotOptions: { bar: { horizontal: true, borderRadius: 4, barHeight: '65%' } },
-          colors: ['#f43f5e'],
-          dataLabels: { enabled: true, formatter: val => val + '%', style: { fontSize: '11px', fontFamily: 'JetBrains Mono' } },
-          xaxis: { categories: stateCategories, labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono' } } },
-          yaxis: { labels: { style: { colors: '#cbd5e1', fontWeight: 600, fontFamily: 'JetBrains Mono' } } },
-          theme: { mode: 'dark' },
-          grid: { borderColor: '#1e293b' },
-          tooltip: { theme: 'dark' }
-        };
-        if (stateChart) stateChart.destroy();
-        stateChart = new ApexCharts(document.querySelector("#chart-state-hotspots"), stateOptions);
-        stateChart.render();
+        const states = kpisData.states || [];
+        if (states.length) {
+          document.getElementById('top-hotspot-state').textContent = `${states[0].customer_state} (${states[0].delay_rate_pct}%)`;
+        }
 
-        // 2. Dispatch vs Transit Scatter Chart
-        const scatterSeries = [{
-          name: 'States',
-          data: data.states.map(x => [x.avg_dispatch_time_hours, x.avg_transit_time_hours, x.delay_rate_pct, x.customer_state])
-        }];
-        const scatterOptions = {
-          series: [{
-            name: 'State Metrics',
-            data: data.states.map(x => ({ x: x.avg_dispatch_time_hours, y: x.avg_transit_time_hours, state: x.customer_state, delay: x.delay_rate_pct }))
-          }],
-          chart: { type: 'scatter', height: 320, toolbar: { show: false }, background: 'transparent' },
-          colors: ['#6366f1'],
-          markers: { size: 9, strokeColors: '#38bdf8', strokeWidth: 1.5, hover: { size: 12 } },
-          xaxis: { title: { text: 'Dispatch Lag (Hours)', style: { color: '#94a3b8' } }, labels: { style: { colors: '#94a3b8' } } },
-          yaxis: { title: { text: 'Transit Time (Hours)', style: { color: '#94a3b8' } }, labels: { style: { colors: '#94a3b8' } } },
-          theme: { mode: 'dark' },
-          grid: { borderColor: '#1e293b' },
-          tooltip: {
-            custom: function({ series, seriesIndex, dataPointIndex, w }) {
-              const d = w.config.series[seriesIndex].data[dataPointIndex];
-              return `<div class="p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-xs font-mono">
-                <span class="font-bold text-indigo-400">State: ${d.state}</span><br>
-                Dispatch Lag: ${d.x}h<br>
-                Transit Duration: ${d.y}h<br>
-                Delay Rate: <span class="text-rose-400 font-semibold">${d.delay}%</span>
-              </div>`;
-            }
-          }
-        };
-        if (scatterChart) scatterChart.destroy();
-        scatterChart = new ApexCharts(document.querySelector("#chart-dispatch-transit"), scatterOptions);
-        scatterChart.render();
-
-        // 3. Category Table
-        const catTbody = document.getElementById('table-category-body');
-        catTbody.innerHTML = '';
-        data.categories.forEach(c => {
-          const badgeClass = c.delay_rate_pct >= 30 ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
-                             c.delay_rate_pct >= 20 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                             'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-800/40 transition';
-          tr.innerHTML = `
-            <td class="py-3 px-4 font-medium text-white">${c.category.replace(/_/g, ' ')}</td>
-            <td class="py-3 px-4 text-slate-300">${c.total_orders.toLocaleString()}</td>
-            <td class="py-3 px-4 font-bold text-rose-400">${c.delay_rate_pct}%</td>
-            <td class="py-3 px-4 text-slate-300">${c.avg_dispatch_time_hours} h</td>
-            <td class="py-3 px-4 text-slate-300">R$ ${c.avg_freight_value.toFixed(2)}</td>
-            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded border ${badgeClass}">${c.delay_rate_pct >= 25 ? 'High' : 'Normal'}</span></td>
-          `;
-          catTbody.appendChild(tr);
-        });
-
+        populateTicker(states, s);
+        populateStateDropdown(states);
+        renderBrazilMap(states);
+        renderStatesChart(states);
+        renderCategories(kpisData.categories || []);
       } catch (err) {
-        console.error("Error loading KPIs:", err);
+        console.error('KPI load error:', err);
       }
     }
 
-    // -----------------------------------------------------------------------
-    // FETCH HIGH-RISK QUEUE
-    // -----------------------------------------------------------------------
-    async function loadQueue() {
-      const search = document.getElementById('filter-search').value;
-      const tier = document.getElementById('filter-tier').value;
-      const state = document.getElementById('filter-state').value;
-      const minProb = document.getElementById('filter-min-prob').value;
+    function populateTicker(states, summary) {
+      const items = states.map(st => {
+        const dot = st.delay_rate_pct >= 35 ? '🔴' : st.delay_rate_pct >= 28 ? '🟠' : '🟢';
+        return `<span class="px-4 inline-flex items-center gap-1.5">${dot} <strong class="text-slate-200">${st.customer_state}</strong> <span class="${st.delay_rate_pct >= 35 ? 'text-rose-400' : 'text-cyan-300'}">${st.delay_rate_pct}% delay</span> · ${Math.round(st.avg_transit_time_hours)}h transit</span>`;
+      });
+      items.unshift(`<span class="px-4 text-indigo-300 font-semibold">NETWORK OTD: ${summary.on_time_delivery_pct}%</span>`);
+      const html = items.join('<span class="text-slate-700">|</span>');
+      document.getElementById('corridor-ticker').innerHTML = html + html;
+    }
 
-      let url = `/api/queue?min_prob=${minProb}&limit=100`;
-      if (search) url += `&search=${encodeURIComponent(search)}`;
-      if (tier && tier !== 'All') url += `&tier=${encodeURIComponent(tier)}`;
-      if (state && state !== 'All') url += `&state=${encodeURIComponent(state)}`;
+    function populateStateDropdown(states) {
+      const sel = document.getElementById('queue-state-filter');
+      const current = sel.value;
+      sel.innerHTML = '<option value="all">All States</option>' +
+        states.map(s => `<option value="${s.customer_state}">${s.customer_state} (${s.delay_rate_pct}% risk)</option>`).join('');
+      if (current) sel.value = current;
+    }
+
+    function renderBrazilMap(states) {
+      const arcsG = document.getElementById('svg-corridor-arcs');
+      const nodesG = document.getElementById('svg-state-nodes');
+      const hub = BR_COORDS.SP;
+      let arcsHtml = '';
+      let nodesHtml = '';
+
+      states.forEach(st => {
+        const pos = BR_COORDS[st.customer_state];
+        if (!pos) return;
+        const color = st.delay_rate_pct >= 35 ? '#f43f5e' : st.delay_rate_pct >= 28 ? '#f59e0b' : '#10b981';
+        if (st.customer_state !== 'SP') {
+          const midX = (hub.x + pos.x) / 2 - 20;
+          const midY = (hub.y + pos.y) / 2 - 25;
+          arcsHtml += `<path d="M ${hub.x} ${hub.y} Q ${midX} ${midY} ${pos.x} ${pos.y}" fill="none" stroke="${color}" stroke-opacity="0.45" stroke-width="1.6" class="flow-arc" />`;
+        }
+        const r = Math.max(8, Math.min(15, st.total_orders / 42));
+        nodesHtml += `
+          <g class="cursor-pointer group"
+             onmouseenter='showMapTooltip(${JSON.stringify(st)})'
+             onmouseleave="hideMapTooltip()"
+             onclick="jumpToStateQueue('${st.customer_state}')">
+            <circle cx="${pos.x}" cy="${pos.y}" r="${r + 6}" fill="${color}" fill-opacity="0.14" />
+            <circle cx="${pos.x}" cy="${pos.y}" r="${r}" fill="#0b101d" stroke="${color}" stroke-width="2.2" />
+            <text x="${pos.x}" y="${pos.y + 3.5}" text-anchor="middle" fill="#f8fafc" font-size="9.5" font-family="JetBrains Mono" font-weight="700">${st.customer_state}</text>
+          </g>`;
+      });
+
+      arcsG.innerHTML = arcsHtml;
+      nodesG.innerHTML = nodesHtml;
+    }
+
+    function showMapTooltip(st) {
+      const tt = document.getElementById('map-tooltip');
+      tt.classList.remove('hidden');
+      document.getElementById('tt-state').textContent = `${st.customer_state} · ${BR_COORDS[st.customer_state]?.name || ''}`;
+      document.getElementById('tt-orders').textContent = `${st.total_orders} orders`;
+      document.getElementById('tt-delay').textContent = `${st.delay_rate_pct}% delay`;
+      document.getElementById('tt-transit').textContent = `${Math.round(st.avg_transit_time_hours)}h transit`;
+    }
+    function hideMapTooltip() { document.getElementById('map-tooltip').classList.add('hidden'); }
+    function jumpToStateQueue(stateCode) {
+      switchTab('queue');
+      document.getElementById('queue-state-filter').value = stateCode;
+      loadQueue();
+    }
+
+    function renderStatesChart(states) {
+      const options = {
+        chart: { type: 'bar', height: 340, background: 'transparent', toolbar: { show: false } },
+        theme: { mode: 'dark' },
+        series: [{ name: 'Delay Rate (%)', data: states.map(s => s.delay_rate_pct) }],
+        plotOptions: {
+          bar: { horizontal: true, borderRadius: 6, barHeight: '62%', distributed: true }
+        },
+        colors: states.map(s => s.delay_rate_pct >= 35 ? '#f43f5e' : s.delay_rate_pct >= 28 ? '#f59e0b' : '#10b981'),
+        dataLabels: {
+          enabled: true,
+          formatter: v => `${v.toFixed(1)}%`,
+          style: { fontFamily: 'JetBrains Mono', fontSize: '11px', colors: ['#e2e8f0'] }
+        },
+        xaxis: {
+          categories: states.map(s => s.customer_state),
+          labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono' } }
+        },
+        yaxis: {
+          labels: { style: { colors: '#e2e8f0', fontFamily: 'JetBrains Mono', fontWeight: 600 } }
+        },
+        grid: { borderColor: 'rgba(148,163,184,0.1)', strokeDashArray: 4 },
+        legend: { show: false },
+        tooltip: { theme: 'dark', y: { formatter: v => `${v}% delayed` } }
+      };
+      mountChart('chart-states', options);
+    }
+
+    function renderCategories(categories) {
+      const options = {
+        chart: { type: 'bar', height: 300, background: 'transparent', toolbar: { show: false } },
+        theme: { mode: 'dark' },
+        series: [
+          { name: 'Delay Rate (%)', data: categories.map(c => c.delay_rate_pct) },
+          { name: 'Avg Dispatch (h)', data: categories.map(c => c.avg_dispatch_time_hours) }
+        ],
+        colors: ['#f43f5e', '#06b6d4'],
+        plotOptions: { bar: { borderRadius: 5, columnWidth: '58%' } },
+        dataLabels: { enabled: false },
+        xaxis: {
+          categories: categories.map(c => c.category.replace(/_/g, ' ')),
+          labels: { rotate: -25, style: { colors: '#94a3b8', fontSize: '10px' } }
+        },
+        grid: { borderColor: 'rgba(148,163,184,0.1)', strokeDashArray: 4 },
+        legend: { labels: { colors: '#cbd5e1' } }
+      };
+      mountChart('chart-categories', options);
+
+      document.getElementById('category-table-body').innerHTML = categories.map(c => `
+        <tr class="hover:bg-slate-900/60 transition-colors">
+          <td class="py-2.5 pr-3 text-slate-200 font-sans font-medium">${c.category.replace(/_/g, ' ')}</td>
+          <td class="py-2.5 px-3 text-right text-slate-300">${c.total_orders}</td>
+          <td class="py-2.5 px-3 text-right ${c.delay_rate_pct >= 32 ? 'text-rose-400' : 'text-amber-300'} font-semibold">${c.delay_rate_pct}%</td>
+          <td class="py-2.5 px-3 text-right text-cyan-300">${c.avg_dispatch_time_hours}h</td>
+          <td class="py-2.5 pl-3 text-right text-slate-400">R$ ${c.avg_freight_value.toFixed(2)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // -----------------------------------------------------------------------
+    // 2. LIVE DISPATCH QUEUE
+    // -----------------------------------------------------------------------
+    function setQueueTier(tier) {
+      activeTier = tier;
+      document.querySelectorAll('.tier-pill').forEach(btn => {
+        const isTarget = btn.dataset.tier === tier;
+        btn.className = isTarget
+          ? 'tier-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white transition-all'
+          : 'tier-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-300 border border-slate-800 hover:border-indigo-500/50 transition-all';
+      });
+      loadQueue();
+    }
+
+    function debounceQueue() {
+      clearTimeout(queueTimer);
+      queueTimer = setTimeout(loadQueue, 250);
+    }
+
+    async function loadQueue() {
+      const state = document.getElementById('queue-state-filter').value;
+      const minProb = Number(document.getElementById('queue-min-prob').value) / 100;
+      const search = document.getElementById('queue-search').value.trim();
+
+      const params = new URLSearchParams({ limit: '100', min_prob: minProb.toString() });
+      if (activeTier !== 'all') params.set('tier', activeTier);
+      if (state && state !== 'all') params.set('state', state);
+      if (search) params.set('search', search);
 
       try {
-        const res = await fetch(url);
+        const res = await fetch(`/api/queue?${params.toString()}`);
         const data = await res.json();
-        document.getElementById('queue-count-badge').innerText = `Found: ${data.total} at-risk shipments`;
+        queueOrders = data.orders || [];
+        document.getElementById('queue-count-label').textContent = `${data.total || 0} matching`;
+        document.getElementById('nav-queue-badge').textContent = data.total || 0;
 
-        const tbody = document.getElementById('table-queue-body');
-        tbody.innerHTML = '';
-        if (data.orders.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="9" class="py-12 text-center text-slate-500">No shipments matching current filters.</td></tr>';
+        const tbody = document.getElementById('queue-table-body');
+        if (!queueOrders.length) {
+          tbody.innerHTML = '<tr><td colspan="8" class="py-10 text-center text-slate-500 font-mono">No orders match current risk filters.</td></tr>';
           return;
         }
 
-        data.orders.forEach(o => {
-          const probPct = (o.delay_probability * 100).toFixed(1);
-          const tier = o.risk_tier || (o.delay_probability >= 0.7 ? 'Critical' : o.delay_probability >= 0.4 ? 'High' : 'Medium');
-          
-          let tierBadge = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
-          if (tier === 'High') tierBadge = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-          if (tier === 'Medium') tierBadge = 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
-          if (tier === 'Low') tierBadge = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-800/40 transition';
-          tr.innerHTML = `
-            <td class="py-3 px-4 font-bold text-white">${o.order_id}</td>
-            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded border font-semibold ${tierBadge}">${tier}</span></td>
-            <td class="py-3 px-4">
-              <div class="flex items-center space-x-2">
-                <div class="w-16 h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div class="h-full bg-gradient-to-r from-amber-500 to-rose-500" style="width: ${probPct}%"></div>
+        tbody.innerHTML = queueOrders.map((o, idx) => {
+          const pct = (o.delay_probability * 100).toFixed(1);
+          const badgeCls = tierBadgeClass(o.risk_tier);
+          const barColor = o.delay_probability >= 0.7 ? 'bg-rose-500' : o.delay_probability >= 0.4 ? 'bg-amber-400' : 'bg-cyan-400';
+          return `
+            <tr onclick="openOrderDrawer(${idx})" class="hover:bg-indigo-500/10 cursor-pointer transition-colors">
+              <td class="py-3 px-4 font-mono text-slate-300">${String(o.order_id).slice(0, 12)}…</td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold ${badgeCls}">${o.risk_tier}</span></td>
+              <td class="py-3 px-3">
+                <div class="flex items-center gap-2 font-mono">
+                  <div class="w-16 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="h-full ${barColor}" style="width: ${Math.min(100, pct)}%"></div>
+                  </div>
+                  <span class="text-white font-semibold">${pct}%</span>
                 </div>
-                <span class="font-bold text-white">${probPct}%</span>
-              </div>
-            </td>
-            <td class="py-3 px-4 text-slate-300">${(o.dispatch_time_hours || 0).toFixed(1)} h</td>
-            <td class="py-3 px-4 text-slate-300">${Math.round(o.distance_km || 0)} km</td>
-            <td class="py-3 px-4 text-slate-300">R$ ${(o.total_order_value || 0).toFixed(2)}</td>
-            <td class="py-3 px-4 text-slate-300">R$ ${(o.total_freight_value || 0).toFixed(2)}</td>
-            <td class="py-3 px-4 text-slate-400">${o.seller_state} &rarr; <span class="text-white font-semibold">${o.customer_state}</span></td>
-            <td class="py-3 px-4 text-slate-400 truncate max-w-[120px]">${(o.primary_category_name || '').replace(/_/g, ' ')}</td>
+              </td>
+              <td class="py-3 px-3 font-mono text-slate-300">${o.seller_state} → <strong class="text-white">${o.customer_state}</strong></td>
+              <td class="py-3 px-3 text-right font-mono text-cyan-300">${Number(o.dispatch_time_hours).toFixed(1)}h</td>
+              <td class="py-3 px-3 text-right font-mono text-slate-400">${Math.round(o.distance_km)} km</td>
+              <td class="py-3 px-3 text-right font-mono text-slate-300">R$${Number(o.total_order_value).toFixed(0)} <span class="text-slate-500">/ R$${Number(o.total_freight_value).toFixed(0)}</span></td>
+              <td class="py-3 px-4 text-slate-300">${String(o.primary_category_name || '').replace(/_/g, ' ')}</td>
+            </tr>
           `;
-          tbody.appendChild(tr);
-        });
+        }).join('');
       } catch (err) {
-        console.error("Queue load error:", err);
+        console.error('Queue error:', err);
       }
     }
 
-    function updateMinProbLabel(val) {
-      document.getElementById('label-min-prob').innerText = Math.round(val * 100) + '%';
+    function tierBadgeClass(tier) {
+      switch (String(tier).toLowerCase()) {
+        case 'critical': return 'bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        case 'high': return 'bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        case 'medium': return 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40';
+        default: return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+      }
+    }
+
+    function openOrderDrawer(idx) {
+      const o = queueOrders[idx];
+      if (!o) return;
+      selectedDrawerOrder = o;
+      document.getElementById('drawer-order-id').textContent = o.order_id;
+      document.getElementById('drawer-prob').textContent = `${(o.delay_probability * 100).toFixed(1)}%`;
+      const tierEl = document.getElementById('drawer-tier');
+      tierEl.textContent = o.risk_tier;
+      tierEl.className = `px-3 py-1 rounded-full text-xs font-mono font-bold ${tierBadgeClass(o.risk_tier)}`;
+
+      const fields = [
+        ['Corridor', `${o.seller_state} → ${o.customer_state}`],
+        ['Dispatch Lag', `${Number(o.dispatch_time_hours).toFixed(1)} hrs`],
+        ['Distance', `${Math.round(o.distance_km)} km`],
+        ['Weight', `${Math.round(o.total_weight_g)} g`],
+        ['Order Value', `R$ ${Number(o.total_order_value).toFixed(2)}`],
+        ['Freight Value', `R$ ${Number(o.total_freight_value).toFixed(2)}`],
+        ['Category', String(o.primary_category_name).replace(/_/g, ' ')],
+      ];
+      document.getElementById('drawer-details').innerHTML = fields.map(([k, v]) => `
+        <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800">
+          <p class="text-[10px] text-slate-400 uppercase">${k}</p>
+          <p class="text-slate-100 font-semibold mt-0.5">${v}</p>
+        </div>
+      `).join('');
+
+      document.getElementById('order-drawer').classList.remove('hidden');
+    }
+
+    function closeDrawer() { document.getElementById('order-drawer').classList.add('hidden'); }
+
+    function simulateFromDrawer() {
+      if (!selectedDrawerOrder) return;
+      const o = selectedDrawerOrder;
+      document.getElementById('sim-dispatch').value = Math.min(120, Math.max(2, Math.round(o.dispatch_time_hours)));
+      document.getElementById('sim-distance').value = Math.min(3500, Math.max(20, Math.round(o.distance_km)));
+      document.getElementById('sim-seller-state').value = o.seller_state || 'SP';
+      document.getElementById('sim-customer-state').value = o.customer_state || 'CE';
+      document.getElementById('sim-order-val').value = Math.round(o.total_order_value || 180);
+      document.getElementById('sim-freight-val').value = Math.round(o.total_freight_value || 35);
+      document.getElementById('sim-weight').value = Math.round(o.total_weight_g || 2000);
+      closeDrawer();
+      switchTab('simulator');
+      updateSimLabels();
     }
 
     // -----------------------------------------------------------------------
-    // TAB 3: RUN PREDICTION & WHAT-IF SIMULATOR
+    // 3. RISK SCORER & WHAT-IF LAB
     // -----------------------------------------------------------------------
-    async function runPrediction() {
+    function applyPreset(name) {
+      if (name === 'critical') {
+        document.getElementById('sim-dispatch').value = 72;
+        document.getElementById('sim-distance').value = 2400;
+        document.getElementById('sim-sla').value = 14;
+        document.getElementById('sim-seller-rate').value = 38;
+        document.getElementById('sim-seller-state').value = 'SP';
+        document.getElementById('sim-customer-state').value = 'CE';
+      } else if (name === 'express') {
+        document.getElementById('sim-dispatch').value = 8;
+        document.getElementById('sim-distance').value = 80;
+        document.getElementById('sim-sla').value = 12;
+        document.getElementById('sim-seller-rate').value = 6;
+        document.getElementById('sim-seller-state').value = 'SP';
+        document.getElementById('sim-customer-state').value = 'SP';
+      } else if (name === 'heavy') {
+        document.getElementById('sim-dispatch').value = 54;
+        document.getElementById('sim-distance').value = 2800;
+        document.getElementById('sim-sla').value = 18;
+        document.getElementById('sim-seller-rate').value = 26;
+        document.getElementById('sim-seller-state').value = 'MG';
+        document.getElementById('sim-customer-state').value = 'AM';
+        document.getElementById('sim-weight').value = 5000;
+      }
+      updateSimLabels();
+    }
+
+    function updateSimLabels() {
+      document.getElementById('val-dispatch').textContent = `${document.getElementById('sim-dispatch').value} h`;
+      document.getElementById('val-distance').textContent = `${document.getElementById('sim-distance').value} km`;
+      document.getElementById('val-sla').textContent = `${document.getElementById('sim-sla').value} d`;
+      document.getElementById('val-seller-rate').textContent = `${document.getElementById('sim-seller-rate').value}%`;
+      debounceSim();
+    }
+
+    function debounceSim() {
+      clearTimeout(simTimer);
+      simTimer = setTimeout(runSimulation, 180);
+    }
+
+    async function runSimulation() {
       const payload = {
-        weight_g: parseFloat(document.getElementById('sim-weight').value) || 2500,
-        volume_cm3: parseFloat(document.getElementById('sim-volume').value) || 8000,
-        order_value: parseFloat(document.getElementById('sim-order-val').value) || 180,
-        freight_value: parseFloat(document.getElementById('sim-freight').value) || 35,
-        distance_km: parseFloat(document.getElementById('sim-dist').value) || 450,
-        customer_state: document.getElementById('sim-cust-state').value,
+        dispatch_hours: Number(document.getElementById('sim-dispatch').value),
+        distance_km: Number(document.getElementById('sim-distance').value),
+        sla_days: Number(document.getElementById('sim-sla').value),
+        seller_delay_rate: Number(document.getElementById('sim-seller-rate').value) / 100,
         seller_state: document.getElementById('sim-seller-state').value,
-        seller_delay_rate: parseFloat(document.getElementById('sim-seller-rate').value) || 0.18,
-        dispatch_hours: parseFloat(document.getElementById('sim-dispatch').value) || 48,
-        sla_days: parseFloat(document.getElementById('sim-sla').value) || 18,
+        customer_state: document.getElementById('sim-customer-state').value,
         category: document.getElementById('sim-category').value,
-        payment_type: document.getElementById('sim-payment').value
+        order_value: Number(document.getElementById('sim-order-val').value) || 180,
+        freight_value: Number(document.getElementById('sim-freight-val').value) || 35,
+        weight_g: Number(document.getElementById('sim-weight').value) || 2000,
+        volume_cm3: 8000,
+        payment_type: 'credit_card',
       };
 
       try {
         const res = await fetch('/api/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
         const data = await res.json();
-        currentPredictionData = data;
-
-        // 1. Update Badge & Text
-        const probPct = data.delay_probability_pct;
-        const statusBadge = document.getElementById('sim-status-badge');
-        const binaryPred = document.getElementById('sim-binary-pred');
-        document.getElementById('sim-model-name').innerText = data.champion_model;
-        document.getElementById('sim-threshold').innerText = data.operational_threshold.toFixed(3);
-
-        if (data.risk_tier === 'Critical') {
-          statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20';
-          statusBadge.innerText = `CRITICAL RISK (${probPct}%)`;
-        } else if (data.risk_tier === 'High') {
-          statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20';
-          statusBadge.innerText = `HIGH RISK (${probPct}%)`;
-        } else if (data.risk_tier === 'Medium') {
-          statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20';
-          statusBadge.innerText = `MODERATE RISK (${probPct}%)`;
-        } else {
-          statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-          statusBadge.innerText = `ON-TIME LIKELY (${probPct}%)`;
+        if (data.error) {
+          document.getElementById('sim-decision-title').textContent = 'Inference Unavailable';
+          document.getElementById('sim-decision-desc').textContent = data.error;
+          return;
         }
-        binaryPred.innerText = data.is_predicted_delayed ? 'Delay Intervention Triggered' : 'Normal Transit';
-
-        // 2. Render / Update Radial Gauge
-        const gaugeOptions = {
-          series: [probPct],
-          chart: { height: 230, type: 'radialBar', background: 'transparent' },
-          plotOptions: {
-            radialBar: {
-              startAngle: -135,
-              endAngle: 135,
-              hollow: { size: '65%', background: 'transparent' },
-              track: { background: '#1e293b', strokeWidth: '100%' },
-              dataLabels: {
-                name: { show: false },
-                value: {
-                  fontSize: '32px',
-                  fontFamily: 'JetBrains Mono',
-                  fontWeight: 800,
-                  color: probPct >= 50 ? '#f43f5e' : probPct >= 20 ? '#f59e0b' : '#10b981',
-                  formatter: val => val + '%'
-                }
-              }
-            }
-          },
-          fill: {
-            colors: [probPct >= 50 ? '#f43f5e' : probPct >= 20 ? '#f59e0b' : '#10b981']
-          },
-          stroke: { lineCap: 'round' }
-        };
-        if (gaugeChart) gaugeChart.destroy();
-        gaugeChart = new ApexCharts(document.querySelector("#chart-risk-gauge"), gaugeOptions);
-        gaugeChart.render();
-
-        // 3. Render Sensitivity Curve
-        renderSensitivityCurve(data.what_if_simulation);
-
-        // 4. Render Local SHAP Bar Chart
-        renderShapChart(data.shap_contributions);
-
+        renderSimulationResult(data);
       } catch (err) {
-        console.error("Prediction error:", err);
+        console.error('Predict error:', err);
       }
     }
 
-    function renderSensitivityCurve(simPoints) {
-      const xLabels = simPoints.map(p => p.hours_saved + 'h Saved');
-      const yProbs = simPoints.map(p => p.delay_probability_pct);
+    function renderSimulationResult(data) {
+      const pct = data.delay_probability_pct;
+      const tierEl = document.getElementById('sim-tier-badge');
+      tierEl.textContent = `${data.risk_tier} Risk`;
+      tierEl.className = `px-2.5 py-1 rounded-full text-xs font-mono font-bold ${tierBadgeClass(data.risk_tier)}`;
+      document.getElementById('sim-model-tag').textContent = `${data.champion_model} · τ* = ${data.operational_threshold}`;
 
-      const curveOptions = {
-        series: [{ name: 'Delay Probability (%)', data: yProbs }],
-        chart: { type: 'area', height: 180, toolbar: { show: false }, background: 'transparent' },
-        colors: ['#6366f1'],
-        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.05, stops: [20, 100] } },
+      const titleEl = document.getElementById('sim-decision-title');
+      const descEl = document.getElementById('sim-decision-desc');
+      if (data.is_predicted_delayed) {
+        titleEl.textContent = 'INTERVENE: Prioritize Warehouse Handoff';
+        titleEl.className = 'font-display font-extrabold text-xl text-rose-400';
+        descEl.textContent = `Calibrated probability (${pct}%) exceeds cost-optimal threshold (${(data.operational_threshold * 100).toFixed(0)}%). Flag parcel for expedited carrier lane.`;
+      } else {
+        titleEl.textContent = 'CLEAR: Standard Fulfillment Lane';
+        titleEl.className = 'font-display font-extrabold text-xl text-emerald-400';
+        descEl.textContent = `Calibrated probability (${pct}%) is within safe SLA bounds. No warehouse intervention required.`;
+      }
+
+      const gaugeColor = pct >= 70 ? '#f43f5e' : pct >= 40 ? '#f59e0b' : pct >= 20 ? '#06b6d4' : '#10b981';
+      mountChart('chart-risk-gauge', {
+        chart: { type: 'radialBar', height: 220, background: 'transparent' },
+        series: [pct],
+        colors: [gaugeColor],
+        plotOptions: {
+          radialBar: {
+            startAngle: -135, endAngle: 135,
+            hollow: { size: '64%' },
+            track: { background: '#1e293b' },
+            dataLabels: {
+              name: { show: true, label: 'DELAY RISK', color: '#94a3b8', fontSize: '11px', fontFamily: 'JetBrains Mono', offsetY: -8 },
+              value: { color: '#f8fafc', fontSize: '26px', fontFamily: 'JetBrains Mono', fontWeight: 700, formatter: v => `${v}%` }
+            }
+          }
+        }
+      });
+
+      const simPts = data.what_if_simulation || [];
+      document.getElementById('sim-whatif-pills').innerHTML = simPts.slice(1).map(pt => `
+        <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300">
+          -${pt.hours_saved}h → <strong class="text-cyan-300">${pt.delay_probability_pct}%</strong>
+          <span class="text-emerald-400">(-${pt.relative_risk_reduction_pct}%)</span>
+        </span>
+      `).join('');
+
+      mountChart('chart-whatif', {
+        chart: { type: 'area', height: 220, background: 'transparent', toolbar: { show: false } },
+        theme: { mode: 'dark' },
+        series: [{ name: 'Delay Prob (%)', data: simPts.map(p => p.delay_probability_pct) }],
+        colors: ['#06b6d4'],
         stroke: { curve: 'smooth', width: 3 },
-        markers: { size: 5, strokeColors: '#6366f1', strokeWidth: 2 },
-        xaxis: { categories: xLabels, labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono', fontSize: '11px' } } },
-        yaxis: { labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono', fontSize: '11px' }, formatter: val => val + '%' } },
-        theme: { mode: 'dark' },
-        grid: { borderColor: '#1e293b' },
-        tooltip: { theme: 'dark' }
-      };
-      if (curveChart) curveChart.destroy();
-      curveChart = new ApexCharts(document.querySelector("#chart-sensitivity-curve"), curveOptions);
-      curveChart.render();
+        fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0.02 } },
+        xaxis: {
+          categories: simPts.map(p => p.hours_saved === 0 ? 'Current' : `-${p.hours_saved}h`),
+          labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono' } }
+        },
+        yaxis: { min: 0, max: 100, labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono' } } },
+        grid: { borderColor: 'rgba(148,163,184,0.1)', strokeDashArray: 4 },
+        dataLabels: { enabled: true, formatter: v => `${v}%`, style: { fontSize: '10px', fontFamily: 'JetBrains Mono' } }
+      });
 
-      updateWhatIfSlider(document.getElementById('sim-expedite-hours').value);
+      const shap = data.shap_contributions || [];
+      const maxAbs = Math.max(0.01, ...shap.map(s => Math.abs(s.shap_value)));
+      document.getElementById('shap-local-bars').innerHTML = shap.slice(0, 6).map(s => {
+        const w = Math.min(100, (Math.abs(s.shap_value) / maxAbs) * 100);
+        const isInc = s.direction === 'increase';
+        return `
+          <div class="text-xs">
+            <div class="flex justify-between font-mono mb-1">
+              <span class="text-slate-300">${s.feature}</span>
+              <span class="${isInc ? 'text-rose-400' : 'text-emerald-400'}">${isInc ? '+' : ''}${s.shap_value}</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+              <div class="h-full ${isInc ? 'bg-rose-500' : 'bg-emerald-500'} rounded-full" style="width: ${w}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
-    function updateWhatIfSlider(hours) {
-      document.getElementById('label-hours-saved').innerText = `${hours} Hours Saved`;
-      if (!currentPredictionData) return;
+    // -----------------------------------------------------------------------
+    // 4. MODEL GOVERNANCE
+    // -----------------------------------------------------------------------
+    async function loadModelInfo() {
+      try {
+        const res = await fetch('/api/model-info');
+        modelData = await res.json();
 
-      const pt = currentPredictionData.what_if_simulation.find(x => x.hours_saved == hours);
-      if (pt) {
-        const badge = document.getElementById('sim-reduction-badge');
-        badge.innerText = `-${pt.relative_risk_reduction_pct}% Risk (${pt.delay_probability_pct}% Delay Prob)`;
+        document.getElementById('gov-champion').textContent = modelData.best_model_name || 'RandomForest';
+        const b = modelData.calibration_brier_improvement || {};
+        document.getElementById('gov-brier').textContent = `${b.uncalibrated || '--'} → ${b.calibrated || '--'}`;
+        document.getElementById('gov-threshold').textContent = modelData.best_threshold ?? '--';
+        const tuned = modelData.test_metrics_tuned || {};
+        document.getElementById('gov-recall').textContent = `${((tuned.recall || 0) * 100).toFixed(1)}%`;
+
+        const lb = modelData.benchmark_leaderboard || [];
+        mountChart('chart-leaderboard', {
+          chart: { type: 'bar', height: 280, background: 'transparent', toolbar: { show: false } },
+          theme: { mode: 'dark' },
+          series: [
+            { name: 'ROC-AUC', data: lb.map(m => m.roc_auc) },
+            { name: 'PR-AUC', data: lb.map(m => m.pr_auc) },
+            { name: 'F1-Score', data: lb.map(m => m.f1_score) },
+            { name: 'Recall', data: lb.map(m => m.recall) }
+          ],
+          colors: ['#6366f1', '#06b6d4', '#10b981', '#f59e0b'],
+          xaxis: { categories: lb.map(m => m.model_name), labels: { style: { colors: '#cbd5e1', fontFamily: 'JetBrains Mono' } } },
+          grid: { borderColor: 'rgba(148,163,184,0.1)', strokeDashArray: 4 },
+          dataLabels: { enabled: false }
+        });
+
+        document.getElementById('leaderboard-table-body').innerHTML = lb.map(m => `
+          <tr class="${m.model_name === modelData.best_model_name ? 'bg-indigo-500/10' : ''}">
+            <td class="py-2 pr-3 font-semibold text-white">${m.model_name}${m.model_name === modelData.best_model_name ? ' 🏆' : ''}</td>
+            <td class="py-2 px-3 text-right text-indigo-300">${m.roc_auc.toFixed(4)}</td>
+            <td class="py-2 px-3 text-right text-cyan-300">${m.pr_auc.toFixed(4)}</td>
+            <td class="py-2 px-3 text-right text-slate-300">${m.brier_score.toFixed(4)}</td>
+            <td class="py-2 px-3 text-right text-emerald-300">${m.f1_score.toFixed(4)}</td>
+            <td class="py-2 pl-3 text-right text-amber-300">${(m.recall * 100).toFixed(1)}%</td>
+          </tr>
+        `).join('');
+
+        const shapEntries = Object.entries(modelData.top_shap_features || {}).slice(0, 10);
+        mountChart('chart-global-shap', {
+          chart: { type: 'bar', height: 400, background: 'transparent', toolbar: { show: false } },
+          theme: { mode: 'dark' },
+          series: [{ name: 'Mean |SHAP|', data: shapEntries.map(([, v]) => v) }],
+          plotOptions: { bar: { horizontal: true, borderRadius: 5, barHeight: '60%' } },
+          colors: ['#6366f1'],
+          xaxis: { categories: shapEntries.map(([k]) => k), labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono' } } },
+          yaxis: { labels: { style: { colors: '#e2e8f0', fontFamily: 'JetBrains Mono', fontSize: '11px' } } },
+          grid: { borderColor: 'rgba(148,163,184,0.1)', strokeDashArray: 4 },
+          dataLabels: { enabled: false }
+        });
+      } catch (err) {
+        console.error('Model info error:', err);
       }
     }
 
-    function renderShapChart(factors) {
-      if (!factors || factors.length === 0) return;
-
-      const categories = factors.map(f => f.feature.replace(/_/g, ' '));
-      const values = factors.map(f => f.shap_value);
-      const colors = factors.map(f => f.shap_value >= 0 ? '#f43f5e' : '#10b981');
-
-      const shapOptions = {
-        series: [{ name: 'SHAP Impact', data: values }],
-        chart: { type: 'bar', height: 210, toolbar: { show: false }, background: 'transparent' },
-        plotOptions: { bar: { horizontal: true, borderRadius: 3, colors: { ranges: [{ from: -10, to: 0, color: '#10b981' }, { from: 0, to: 10, color: '#f43f5e' }] } } },
-        dataLabels: { enabled: false },
-        xaxis: { labels: { style: { colors: '#94a3b8', fontFamily: 'JetBrains Mono', fontSize: '10px' } } },
-        yaxis: { labels: { style: { colors: '#cbd5e1', fontFamily: 'JetBrains Mono', fontSize: '11px' } } },
-        theme: { mode: 'dark' },
-        grid: { borderColor: '#1e293b' },
-        tooltip: { theme: 'dark' }
-      };
-      if (shapChart) shapChart.destroy();
-      shapChart = new ApexCharts(document.querySelector("#chart-shap-waterfall"), shapOptions);
-      shapChart.render();
+    // -----------------------------------------------------------------------
+    // COMMAND PALETTE & CHART HELPER
+    // -----------------------------------------------------------------------
+    function openCommandPalette() {
+      const modal = document.getElementById('cmd-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      const input = document.getElementById('cmd-input');
+      input.value = '';
+      filterCommands('');
+      setTimeout(() => input.focus(), 50);
     }
 
-    function resetSimulatorDefaults() {
-      document.getElementById('sim-weight').value = 2500;
-      document.getElementById('sim-volume').value = 8000;
-      document.getElementById('sim-order-val').value = 180;
-      document.getElementById('sim-freight').value = 35;
-      document.getElementById('sim-dist').value = 450;
-      document.getElementById('label-sim-dist').innerText = '450 km';
-      document.getElementById('sim-sla').value = 18;
-      document.getElementById('label-sim-sla').innerText = '18 Days';
-      document.getElementById('sim-dispatch').value = 48;
-      document.getElementById('label-sim-dispatch').innerText = '48 Hours';
-      document.getElementById('sim-seller-rate').value = 0.18;
-      document.getElementById('label-sim-seller-rate').innerText = '18%';
-      runPrediction();
+    function closeCommandPalette() {
+      const modal = document.getElementById('cmd-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
-    // Initial Data Fetch
-    document.addEventListener("DOMContentLoaded", () => {
-      loadKPIs();
-      loadQueue();
-      runPrediction();
-    });
+    function filterCommands(q) {
+      const list = document.getElementById('cmd-list');
+      const filtered = COMMANDS.filter(c => c.label.toLowerCase().includes(q.toLowerCase()));
+      list.innerHTML = filtered.map((c, idx) => `
+        <button onclick="runCommandIdx(${COMMANDS.indexOf(c)})" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-indigo-600/25 text-slate-200 flex items-center justify-between transition-colors">
+          <span>${c.label}</span>
+          <span class="text-[10px] font-mono text-slate-500">↵</span>
+        </button>
+      `).join('');
+    }
+
+    function runCommandIdx(idx) {
+      closeCommandPalette();
+      COMMANDS[idx]?.action();
+    }
+
+    function mountChart(id, options) {
+      if (charts[id]) {
+        charts[id].destroy();
+      }
+      charts[id] = new ApexCharts(document.getElementById(id), options);
+      charts[id].render();
+    }
   </script>
 </body>
 </html>
-
